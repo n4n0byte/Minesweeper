@@ -18,13 +18,9 @@ namespace Minesweeper.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(UserModel model)
-        {
+        public ActionResult Login(UserModel model) {
             SecurityService service = new SecurityService();
-            if (service.Authenticate(model))
-                return View("LoginPassed", model);
-            else
-                return View("LoginFailed");
+            return service.Authenticate(model) ? View("LoginPassed", model) : View("LoginFailed");
         }
     }
 }
