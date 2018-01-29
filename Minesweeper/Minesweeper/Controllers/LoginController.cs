@@ -22,9 +22,9 @@ namespace Minesweeper.Controllers
         {
             SecurityService service = new SecurityService();
             if (service.Authenticate(model))
-                return View("LoginPassed");
+                return View("LoginPassed", model);
             else
-                return View("LoginFailed", model);
+                return View("LoginFailed");
         }
     }
 }
