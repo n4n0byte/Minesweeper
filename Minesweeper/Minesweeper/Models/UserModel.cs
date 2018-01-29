@@ -33,6 +33,10 @@ namespace Minesweeper.Models
         [Required]
         public string LastName { get; set; }
 
+        [Required]
+        [Range(10,180)]
+        public int Age { get; set; }
+
         [StringLength(50, MinimumLength = 3)]
         [Required]
         [EmailAddress]
