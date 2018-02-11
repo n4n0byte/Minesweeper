@@ -20,7 +20,11 @@ namespace Minesweeper.Controllers
         [HttpPost]
         public ActionResult Login(UserModel model) {
             SecurityService service = new SecurityService();
-            return service.Authenticate(model) ? View("LoginPassed", model) : View("LoginFailed");
+            if (service.Authenticate(model)) {
+                return RedirectToAction("Index", "Game");
+            }
+
+            return View("LoginFailed");
         }
     }
 }
