@@ -11,6 +11,9 @@ namespace Minesweeper.Models
         public int Rows { get; set; } = 7;
         public int Cols { get; set; } = 7;
         public int Secs { get; set; } = 0;
+        public bool HasWon { get; set; } = false;
+        public bool HasLost { get; set; } = false;
+
         private static GameModel Game = new GameModel();
 
         public static GameModel GetGameModelInstance() {

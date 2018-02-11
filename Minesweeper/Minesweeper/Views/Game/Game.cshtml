@@ -21,14 +21,15 @@
 
 <div class="navbar navbar-inverse navbar-fixed-top">
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Log Out", "Index", "Login", routeValues: null, htmlAttributes: null)</li>
-        <li>@Html.ActionLink("Retry", "Index", "Game", routeValues: null, htmlAttributes:null)</li>
+        <li><a href="/Game">Retry</a></li>
+        <li>@Html.ActionLink("Log Out", "Index", "Login", new {}, new {})</li>
     </ul>
 </div>
     
 <div class="container" align="center" style="margin-top: 5%">
     <h3 id="timer">
-       Loading Timer...
+        @Game.Secs<br>
+        Seconds
     </h3>
 </div>    
 
@@ -47,6 +48,7 @@
                         Value = Cell.liveNeighbors.ToString();
                     }
 
+                    // sets 
                     @Html.ActionLink(@Value,"Index", "Game", new {Row = Cell.row, Col = Cell.col}, 
                                                              new {@class = "btn btn-default", @style = "width: 75px; height: 75px"});
 
@@ -62,22 +64,38 @@
 
     var sec = parseInt(@Game.Secs);
 
+    $(".btn-default").each(
+        function(e) {
+            if ($(this).text() === "*" && document.location.pathname !== "/Game/lost") {
+
+                window.location.replace("/Game/lost");
+
+                if (confirm("you lost try again?")) {
+                    window.location.replace("/Game");
+                } 
+                
+            }
+        }
+    );
+
+
     $(".btn-default").click(function (e) {
 
         // stops user from clicking revealed tile
         if ($(this).text() !== " ") {
             e.preventDefault();
         }
-
     });
-
-    // updates timer every second
-    setInterval(function () {
-        $("#timer").html(++sec + " <br>Seconds");
-        // ajax request to update time
-        $.post("/Game/Secs", { Secs: sec});
-
-    }, 1000);
+    
+    if (document.location.pathname !== "/Game/lost") {
+        // updates timer every second
+        setInterval(function() {
+                $("#timer").html(++sec + "<br>Seconds");
+                // ajax request to update time
+                $.post('/Game/Secs', { Secs: sec });
+                
+            }, 1000);
+    } 
 
     //replaces right click functionality with flag
     $(".btn-default").on("contextmenu", function (Event) {

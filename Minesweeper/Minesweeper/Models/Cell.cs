@@ -17,19 +17,11 @@ namespace Minesweeper {
         public Cell(int row, int col) {
             this.row = row;
             this.col = col;
-            reset();
+            Reset();
         }
 
         public void toggleFlag() {
 
-            /**
-            if (this.Text == "F") {
-                this.Text = "";
-            }
-            else {
-                this.Text = "F";
-            }
-            */
             flagged = !flagged;
 
         }
@@ -37,7 +29,7 @@ namespace Minesweeper {
         public Cell() : this(-1, -1) {
         }
 
-        public void reset() {
+        public void Reset() {
             this.liveNeighbors = 0;
             this.BeenVisited = false;
             this.isLive = false;

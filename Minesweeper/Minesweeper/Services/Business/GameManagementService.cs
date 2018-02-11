@@ -8,10 +8,17 @@ namespace Minesweeper.Services.Business {
         private readonly Random Rand = new Random();
 
         public void ResetBoard() {
+
+            // reset win loss bools
+            Game.HasLost = false;
+            Game.HasWon = false;
+
+            Game.Secs = 0;
+
             // clears each tile
             for (var i = 0; i < Game.Rows; i++)
             for (var j = 0; j < Game.Cols; j++)
-                Game.Board[i, j].reset();
+                Game.Board[i, j].Reset();
 
 
             RandomlySetActiveCells();
@@ -39,7 +46,7 @@ namespace Minesweeper.Services.Business {
             return true;
         }
 
-        public List<Cell> GetBlankNeighbors(int row, int col) {
+        private List<Cell> GetBlankNeighbors(int row, int col) {
             var neighbors = new List<Cell>();
 
             // checking for unvisited 0 val neighbors
@@ -98,6 +105,16 @@ namespace Minesweeper.Services.Business {
             }
         }
 
+        private bool HasLost() {
+            for (var row = 0; row < Game.Rows; row++)
+            for (var col = 0; col < Game.Cols; col++)
+                // check for non visited regular tiles
+                if (Game.Board[row, col].BeenVisited && Game.Board[row, col].isLive)
+                    return true;
+
+            return false;
+        }
+
         public void UpdateTime(int Secs) {
             Game.Secs = Secs;
         }
@@ -110,6 +127,15 @@ namespace Minesweeper.Services.Business {
             }
             else {
                 CurCell.BeenVisited = true;
+            }
+
+           
+            if (HasWon()) {
+                Game.HasWon = true;
+            }
+            
+            else if (HasLost()) {
+                Game.HasLost = true;
             }
 
         }
