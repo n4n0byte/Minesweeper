@@ -1,6 +1,6 @@
 ﻿@using System.Activities.Statements
 @using Minesweeper.Models
-z
+
 @{
     Layout = null;
     var Game = GameModel.GetGameModelInstance();
@@ -60,9 +60,16 @@ z
     
 <script>
 
-
     var sec = parseInt(@Game.Secs);
 
+    $(".btn-default").click(function (e) {
+
+        // stops user from clicking revealed tile
+        if ($(this).text() !== " ") {
+            e.preventDefault();
+        }
+
+    });
 
     // updates timer every second
     setInterval(function () {
