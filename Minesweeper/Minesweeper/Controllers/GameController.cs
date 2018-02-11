@@ -19,16 +19,6 @@ namespace Minesweeper.Controllers
             return View("Game");
         }
 
-        [HttpPost]
-        [Route("Game/{Secs}")]
-        public ActionResult Index(int Secs)
-        {
-
-            GameManagementService GameSvc = new GameManagementService();
-            GameModel.GetGameModelInstance().Secs = Secs;
-            return View("Game");
-        }
-
         [HttpGet]
         [Route("Game/{Result}")]
         public ActionResult Index(String Result) {
@@ -50,12 +40,12 @@ namespace Minesweeper.Controllers
         }
 
         [HttpGet]
-        [Route("Game/{Row}/{Col}")]
-        public ActionResult Index(int Row, int Col) {
-
+        [Route("Game/{Row}/{Col}/{Secs}")]
+        public ActionResult Index(int Row, int Col, int Secs) {
             GameManagementService GameSvc = new GameManagementService();
             
             GameSvc.ProcessCell(Row,Col);
+            GameSvc.UpdateTime(Secs);
 
             if (GameModel.GetGameModelInstance().HasWon) {
                 return RedirectToAction("Index", "Game", new {Result = "won"});
@@ -68,6 +58,7 @@ namespace Minesweeper.Controllers
 
             return View("Game");
         }
+
 
     }
 }

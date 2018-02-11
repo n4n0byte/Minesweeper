@@ -21,7 +21,7 @@
 
 <div class="navbar navbar-inverse navbar-fixed-top">
     <ul class="nav navbar-nav navbar-right">
-        <li><a href="/Game">Retry</a></li>
+        <li>@Html.ActionLink("Restart", "Index", "Game", new { Row = 2 }, new { })</li>
         <li>@Html.ActionLink("Log Out", "Index", "Login", new {}, new {})</li>
     </ul>
 </div>
@@ -47,9 +47,9 @@
                     else if (Cell.BeenVisited) {
                         Value = Cell.liveNeighbors.ToString();
                     }
+                    
 
-                    // sets 
-                    @Html.ActionLink(@Value,"Index", "Game", new {Row = Cell.row, Col = Cell.col}, 
+                    @Html.ActionLink(@Value,"Index", "Game", new {Row = Cell.row, Col = Cell.col, Secs=0}, 
                                                              new {@class = "btn btn-default", @style = "width: 75px; height: 75px"});
 
                 }
@@ -62,53 +62,67 @@
     
 <script>
 
-    var sec = parseInt(@Game.Secs);
 
-    $(".btn-default").each(
-        function(e) {
-            if ($(this).text() === "*" && document.location.pathname !== "/Game/lost") {
+    // checks too see if page can be modified safely
+    $(document).ready(function () {
 
-                window.location.replace("/Game/lost");
+        var sec = parseInt(@Game.Secs);
 
-                if (confirm("you lost try again?")) {
-                    window.location.replace("/Game");
-                } 
+
+        $(".btn-default").each(
+            function(e) {
+                if ($(this).text() === "*" && document.location.pathname !== "/Game/lost") {
+
+                    window.location.replace("/Game/lost");
+
+                    if (confirm("you lost, try again?")) {
+                        window.location.replace("/Game");
+                    } 
                 
+                }
             }
-        }
-    );
+        );
 
 
-    $(".btn-default").click(function (e) {
+        $(".btn-default").click(function (e) {
 
-        // stops user from clicking revealed tile
-        if ($(this).text() !== " ") {
-            e.preventDefault();
-        }
-    });
+            // stops user from clicking revealed tile
+            if ($(this).text() !== " ") {
+                e.preventDefault();
+            } else {
+                var _href = $(this).attr('href');
+                var _secRemovedHref = _href.substr(0, _href.length - 1);
+                console.log(_secRemovedHref);
+                $(this).attr("href", _secRemovedHref + sec);
+            }
+
+        });
     
-    if (document.location.pathname !== "/Game/lost") {
-        // updates timer every second
-        setInterval(function() {
+        if (document.location.pathname !== "/Game/lost" && document.location.pathname !== "/Game/won") {
+            // updates timer every second
+            setInterval(function() {
                 $("#timer").html(++sec + "<br>Seconds");
                 // ajax request to update time
-                $.post('/Game/Secs', { Secs: sec });
+                //$.post('/Game/Secs', { Secs: sec });
                 
             }, 1000);
-    } 
+        } 
 
-    //replaces right click functionality with flag
-    $(".btn-default").on("contextmenu", function (Event) {
-        if ($(this).text() === " ") {
-            $(this).text("F");
-            $(this).on("click", (e) => { e.preventDefault(); })
-        }
-        else if ($(this).text() === "F") {
-            $(this).text(" ");
-            $(this).unbind('click').click();
-        }
-        return false;
-    })
+        //replaces right click functionality with flag
+        $(".btn-default").on("contextmenu", function (Event) {
+            if ($(this).text() === " ") {
+                $(this).text("F");
+                $(this).on("click", (e) => { e.preventDefault(); })
+            }
+            else if ($(this).text() === "F") {
+                $(this).text(" ");
+                $(this).unbind('click').click();
+            }
+            return false;
+        })
+    });
+
+
 
 
 </script>
