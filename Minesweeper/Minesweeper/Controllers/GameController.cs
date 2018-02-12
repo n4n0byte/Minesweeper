@@ -26,10 +26,12 @@ namespace Minesweeper.Controllers
             GameManagementService GameSvc = new GameManagementService();
 
             if (Result.Equals("won")) {
+                //todo add extra functionality
                 GameSvc.RevealAll();
-                return RedirectToAction("Index", "Game");
+                return View("Game");
             }
             else if (Result.Equals("lost")) {
+                //todo add extra functionality
                 GameSvc.RevealAll();
                 return View("Game");
             }
