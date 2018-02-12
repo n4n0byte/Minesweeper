@@ -39,6 +39,17 @@ namespace Minesweeper.Controllers
             
         }
 
+        [HttpPost]
+        [Route("Game/{Row}/{Col}")]
+        public ActionResult Flag(int Row, int Col)
+        {
+            GameManagementService GameSvc = new GameManagementService();
+            Debug.WriteLine(Row);
+            GameSvc.ToggleFlag(Row,Col);
+
+            return View("Game");
+        }
+
         [HttpGet]
         [Route("Game/{Row}/{Col}/{Secs}")]
         public ActionResult Index(int Row, int Col, int Secs) {

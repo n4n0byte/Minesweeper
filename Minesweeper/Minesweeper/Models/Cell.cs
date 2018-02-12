@@ -12,7 +12,7 @@ namespace Minesweeper {
         public int liveNeighbors { get; set; }
         public bool BeenVisited { get; set; } = false;
         public bool isLive { get; set; }
-        public bool flagged { get; set; }
+        public bool flagged { get; set; } = false;
 
         public Cell(int row, int col) {
             this.row = row;

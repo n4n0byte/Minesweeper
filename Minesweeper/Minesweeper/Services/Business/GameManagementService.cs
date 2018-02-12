@@ -119,6 +119,11 @@ namespace Minesweeper.Services.Business {
             Game.Secs = Secs;
         }
 
+        public void ToggleFlag(int Row, int Col) {
+            Cell CurCell = Game.Board[Row, Col];
+            CurCell.flagged = !CurCell.flagged;
+        }
+
         public void ProcessCell(int Row, int Col) {
             Cell CurCell = Game.Board[Row, Col];
 

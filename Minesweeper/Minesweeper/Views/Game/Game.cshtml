@@ -21,7 +21,7 @@
 
 <div class="navbar navbar-inverse navbar-fixed-top">
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Restart", "Index", "Game", new { Row = 2 }, new { })</li>
+        <li><a href="/Game">Retry</a></li>
         <li>@Html.ActionLink("Log Out", "Index", "Login", new {}, new {})</li>
     </ul>
 </div>
@@ -41,16 +41,20 @@
                     var Cell = Game.Board[Row, Col];
                     var Value = " ";
 
-                    if (Cell.isLive && Cell.BeenVisited) {
+                    if (Cell.flagged && !Cell.BeenVisited) {
+                        Value = "F";
+                    }
+                    else if (Cell.isLive && Cell.BeenVisited) {
                         Value = "*";
                     }
                     else if (Cell.BeenVisited) {
                         Value = Cell.liveNeighbors.ToString();
                     }
-                    
 
-                    @Html.ActionLink(@Value,"Index", "Game", new {Row = Cell.row, Col = Cell.col, Secs=0}, 
-                                                             new {@class = "btn btn-default", @style = "width: 75px; height: 75px"});
+
+                    @Html.ActionLink(@Value,"Index", "Game", new {Row = Cell.row, Col = Cell.col, Secs=0},
+                        new {@class = "btn btn-default", @style = "width: 75px; height: 75px", oncontextmenu = $"flag({Cell.row},{Cell.col},\"{Cell.BeenVisited}\");"})
+                    ;
 
                 }
 
@@ -62,26 +66,19 @@
     
 <script>
 
+    function flag(row, col, beenVisited) {
+        if (beenVisited === "False") {
+            $.post("/Game/Row/Col", { Row: row, Col: col });
+        }
+    }
 
     // checks too see if page can be modified safely
     $(document).ready(function () {
 
         var sec = parseInt(@Game.Secs);
-
-
-        $(".btn-default").each(
-            function(e) {
-                if ($(this).text() === "*" && document.location.pathname !== "/Game/lost") {
-
-                    window.location.replace("/Game/lost");
-
-                    if (confirm("you lost, try again?")) {
-                        window.location.replace("/Game");
-                    } 
-                
-                }
-            }
-        );
+        function reset() {
+            
+        }
 
 
         $(".btn-default").click(function (e) {
@@ -98,21 +95,39 @@
 
         });
     
+        // stops timer if uri indicates lost or won
         if (document.location.pathname !== "/Game/lost" && document.location.pathname !== "/Game/won") {
             // updates timer every second
             setInterval(function() {
-                $("#timer").html(++sec + "<br>Seconds");
-                // ajax request to update time
-                //$.post('/Game/Secs', { Secs: sec });
-                
-            }, 1000);
-        } 
+                    $("#timer").html(++sec + "<br>Seconds");
+                    // ajax request to update time
+                    //$.post('/Game/Secs', { Secs: sec });
+
+                },
+                1000);
+        }
+            //
+        else {
+
+            if (document.location.pathname === "/Game/lost") {
+                alert("You Lost");
+            }
+            if (document.location.pathname === "/Game/won") {
+                alert("You Won");
+            }
+
+            if (confirm("Start New Game")) {
+                window.location = "/Game";
+            }
+
+        }
 
         //replaces right click functionality with flag
         $(".btn-default").on("contextmenu", function (Event) {
             if ($(this).text() === " ") {
                 $(this).text("F");
                 $(this).on("click", (e) => { e.preventDefault(); })
+                
             }
             else if ($(this).text() === "F") {
                 $(this).text(" ");
