@@ -53,10 +53,8 @@
 
 
                     @Html.ActionLink(@Value,"Index", "Game", new {Row = Cell.row, Col = Cell.col, Secs=0},
-                        new {@class = "btn btn-default", @style = "width: 75px; height: 75px", oncontextmenu = $"flag({Cell.row},{Cell.col},\"{Cell.BeenVisited}\");"})
-                    ;
-
-                }
+                        new {@class = "btn btn-default", @style = "width: 75px; height: 75px", oncontextmenu = $"flag({Cell.row},{Cell.col},\"{Cell.BeenVisited}\");"});
+                    }
 
             </div>
         }
@@ -66,6 +64,7 @@
     
 <script>
 
+    // toggles flag 
     function flag(row, col, beenVisited) {
         if (beenVisited === "False") {
             $.post("/Game/Row/Col", { Row: row, Col: col });
@@ -100,11 +99,7 @@
             // updates timer every second
             setInterval(function() {
                     $("#timer").html(++sec + "<br>Seconds");
-                    // ajax request to update time
-                    //$.post('/Game/Secs', { Secs: sec });
-
-                },
-                1000);
+            }, 1000);
         }
             
         else {
