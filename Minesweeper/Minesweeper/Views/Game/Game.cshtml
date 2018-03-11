@@ -13,92 +13,78 @@
     <meta name="viewport" content="width=device-width initial-scale=1"/>
     <link href="@Url.Content("~/Content/bootstrap.css")" rel="stylesheet"/>
     <script type="text/javascript" src="~/Content/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
     <title>Game</title>
 </head>
 <body>
     
-    
-
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <ul class="nav navbar-nav navbar-right">
-        <li><a href="/Game">Retry</a></li>
-        <li>@Html.ActionLink("Log Out", "Index", "Login", new {}, new {})</li>
-    </ul>
+<div id="navbar">
+    @Html.Partial("NavbarPartialView")
 </div>
-    
+
 <div class="container" align="center" style="margin-top: 5%">
     <h3 id="timer">
         @Game.Secs<br>
         Seconds
     </h3>
-</div>    
-
-<div class="container" align="center" style="margin-top: 2%">
-    <div class="">
-        @for (var Row = 0; Row < Game.Rows; Row++) {
-            <div class="btn-group-vertical">
-                @for (var Col = 0; Col < Game.Cols; Col++) {
-                    var Cell = Game.Board[Row, Col];
-                    var Value = " ";
-
-                    if (Cell.flagged && !Cell.BeenVisited) {
-                        Value = "F";
-                    }
-                    else if (Cell.isLive && Cell.BeenVisited) {
-                        Value = "*";
-                    }
-                    else if (Cell.BeenVisited) {
-                        Value = Cell.liveNeighbors.ToString();
-                    }
-
-
-                    @Html.ActionLink(@Value,"Index", "Game", new {Row = Cell.row, Col = Cell.col, Secs=0},
-                        new {@class = "btn btn-default", @style = "width: 75px; height: 75px", oncontextmenu = $"flag({Cell.row},{Cell.col},\"{Cell.BeenVisited}\");"});
-                    }
-
-            </div>
-        }
-
-    </div>
 </div>
-    
+         
+<div id="GameBoard">
+    @Html.Partial("GameBoard",(Object)"Ongoing")        
+</div>
+
 <script>
 
     // toggles flag 
     function flag(row, col, beenVisited) {
         if (beenVisited === "False") {
             $.post("/Game/Row/Col", { Row: row, Col: col });
+            $(`#${row},${col}`).html("F");
         }
     }
+
+    //resets flag functionality
+    function resetFlagAction() {
+        $(".btn-default").on("contextmenu", function (event) {
+            if ($(this).text() === " ") {
+                $(this).text("F");
+                $(this).on("click", (e) => { e.preventDefault(); });
+            }
+            else if ($(this).text() === "F") {
+                $(this).text(" ");
+                $(this).unbind('click').click();
+            }
+            return false;
+        });
+    }
+
 
     // checks too see if page can be modified safely
     $(document).ready(function () {
 
         var sec = parseInt(@Game.Secs);
-        function reset() {
-            
-        }
 
 
         $(".btn-default").click(function (e) {
 
             // stops user from clicking revealed tile
-            if ($(this).text() !== " ") {
+            if ($(this).text() !== " ") {
                 e.preventDefault();
             } else {
                 var _href = $(this).attr('href');
                 var _secRemovedHref = _href.substr(0, _href.length - 1);
-                console.log(_secRemovedHref);
                 $(this).attr("href", _secRemovedHref + sec);
             }
 
         });
+
+        resetFlagAction();
     
         // stops timer if uri indicates lost or won
         if (document.location.pathname !== "/Game/lost" && document.location.pathname !== "/Game/won") {
             // updates timer every second
             setInterval(function() {
-                    $("#timer").html(++sec + "<br>Seconds");
+                $("#timer").html(++sec + "<br>Seconds");
             }, 1000);
         }
             
@@ -117,24 +103,9 @@
 
         }
 
-        //replaces right click functionality with flag
-        $(".btn-default").on("contextmenu", function (Event) {
-            if ($(this).text() === " ") {
-                $(this).text("F");
-                $(this).on("click", (e) => { e.preventDefault(); })
-                
-            }
-            else if ($(this).text() === "F") {
-                $(this).text(" ");
-                $(this).unbind('click').click();
-            }
-            return false;
-        })
     });
 
+</script>    
 
-
-
-</script>
 </body>
 </html>

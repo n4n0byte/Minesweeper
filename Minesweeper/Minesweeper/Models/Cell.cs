@@ -3,15 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Minesweeper {
     public class Cell {
 
+        [JsonProperty("row")]
         public int row { get; set; }
+
+        [JsonProperty("col")]
         public int col { get; set; }
+
         public int liveNeighbors { get; set; }
+
+        [JsonProperty("beenVisited")]
         public bool BeenVisited { get; set; } = false;
+
         public bool isLive { get; set; }
+
+        [JsonProperty("flagged")]
         public bool flagged { get; set; } = false;
 
         public Cell(int row, int col) {
@@ -19,7 +29,7 @@ namespace Minesweeper {
             this.col = col;
             Reset();
         }
-
+        
         public void toggleFlag() {
 
             flagged = !flagged;

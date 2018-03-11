@@ -9,12 +9,16 @@ using Minesweeper.Services.Business;
 
 namespace Minesweeper.Controllers
 {
-    public class GameController : Controller
-    {
+    public class GameController : Controller {
+
+        private GameManagementService GameSvc;
+
+        public GameController() { 
+            GameSvc = new GameManagementService();
+        }
+
         [HttpGet]
-        public ActionResult Index()
-        {
-            GameManagementService GameSvc = new GameManagementService();
+        public ActionResult Index() {
             GameSvc.ResetBoard();
             return View("Game");
         }
@@ -55,18 +59,22 @@ namespace Minesweeper.Controllers
         [HttpGet]
         [Route("Game/{Row}/{Col}/{Secs}")]
         public ActionResult Index(int Row, int Col, int Secs) {
+
+            String GameStatus = "Ongoing";
             GameManagementService GameSvc = new GameManagementService();
-            
-            GameSvc.ProcessCell(Row,Col);
-            GameSvc.UpdateTime(Secs);
 
-            if (GameModel.GetGameModelInstance().HasWon) {
-                return RedirectToAction("Index", "Game", new {Result = "won"});
-            }
+            if (Request.IsAjaxRequest()) {
+                GameSvc.ProcessCell(Row, Col);
+                GameSvc.UpdateTime(Secs);
 
-            if (GameModel.GetGameModelInstance().HasLost) {
-                Debug.WriteLine("Lost");
-                return RedirectToAction("Index", "Game", new { Result = "lost" });
+                if (GameModel.GetGameModelInstance().HasWon) {
+                    GameStatus = "Won";
+                }
+                if (GameModel.GetGameModelInstance().HasLost) {
+                    GameStatus = "Lost";
+                }
+
+                return PartialView("GameBoard",(Object)GameStatus);
             }
 
             return View("Game");

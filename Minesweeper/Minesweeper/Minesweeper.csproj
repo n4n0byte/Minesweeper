@@ -81,6 +81,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -237,6 +238,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -266,6 +269,9 @@
     <Content Include="Views\Register\RegisterSuccess.cshtml" />
     <Content Include="Views\Login\LoginPassed.cshtml" />
     <Content Include="Views\Game\Game.cshtml" />
+    <Content Include="Views\Shared\GameBoard.cshtml" />
+    <Content Include="Views\Shared\NavbarPartialView.cshtml" />
+    <Content Include="Views\Shared\Timer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

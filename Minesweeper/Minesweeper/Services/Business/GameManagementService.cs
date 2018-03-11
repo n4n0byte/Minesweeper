@@ -111,7 +111,6 @@ namespace Minesweeper.Services.Business {
                 // check for non visited regular tiles
                 if (Game.Board[row, col].BeenVisited && Game.Board[row, col].isLive)
                     return true;
-
             return false;
         }
 
@@ -141,6 +140,10 @@ namespace Minesweeper.Services.Business {
             
             else if (HasLost()) {
                 Game.HasLost = true;
+            }
+
+            if (Game.HasWon || Game.HasLost) {
+                RevealAll();
             }
 
         }

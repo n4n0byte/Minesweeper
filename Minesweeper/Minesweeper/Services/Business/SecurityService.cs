@@ -8,19 +8,22 @@ using System.Web;
 namespace Minesweeper.Services.Business {
     public class SecurityService {
 
+        private static SecurityDAO Service = new SecurityDAO();
+
         public void RegisterUser(UserModel user) {
-            SecurityDAO service = new SecurityDAO();
-            service.RegisterUser(user);
+            Service.RegisterUser(user);
         }
 
         public bool CanRegister(UserModel user) {
-            SecurityDAO service = new SecurityDAO();
-            return !service.CheckIfUserIsRegistered(user);
+            return !Service.CheckIfUserIsRegistered(user);
+        }
+
+        public int GetUserId(UserModel user) {
+            return Service.GetUserId(user);
         }
 
         public bool Authenticate(UserModel user) {
-            SecurityDAO service = new SecurityDAO();
-            return service.FindByUser(user);
+            return Service.FindByUser(user);
         }
     }
 

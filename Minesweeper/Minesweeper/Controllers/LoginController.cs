@@ -2,6 +2,7 @@
 using Minesweeper.Services.Business;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -21,6 +22,7 @@ namespace Minesweeper.Controllers
         public ActionResult Login(UserModel model) {
             SecurityService service = new SecurityService();
             if (service.Authenticate(model)) {
+                Session["id"] = service.GetUserId(model);
                 return RedirectToAction("Index", "Game");
             }
 
