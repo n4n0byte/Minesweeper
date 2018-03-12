@@ -1,12 +1,11 @@
 ﻿@using Minesweeper.Models
 @{
-    var Game = GameModel.GetGameModelInstance();   
+    var Game = GameModel.GetGameModelInstance();
 }
-<div class="container" style="margin-top: 2%; ">
+<div class="container" style="margin-top: 2%;">
 
     <div class="form-horizontal">
-        @for (var Row = 0; Row < Game.Rows; Row++)
-        {
+        @for (var Row = 0; Row < Game.Rows; Row++) {
             <div class="hidden-xs col-lg-3"></div>
             <div class="col-lg-7">
                 @for (var Col = 0; Col < Game.Cols; Col++) {
@@ -45,17 +44,21 @@
         }
 
     </div>
-    
+
     <script>
-        
-        if ("@Model" === "Won") {           
-            if (confirm("You Won Try Again?")) {
+
+        if ("@Model" === "Won") {
+            //stop timer
+            clearInterval(interval);
+            if (confirm("You Won, Try Again?")) {
                 resetGame();
             }
         }
 
         if ("@Model" === "Lost") {
-            if (confirm("You Lost Try Again")) {
+            //stop timer
+            clearInterval(interval);
+            if (confirm("You Lost, Try Again?")) {
                 resetGame();
             }
         }

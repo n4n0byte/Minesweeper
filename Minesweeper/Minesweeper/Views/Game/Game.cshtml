@@ -61,6 +61,7 @@
 
     }
 
+    //
     function tileClick(row, col) {
             
         var curBtn = $('#' + row + "\\," + col);
@@ -71,9 +72,7 @@
             var _secRemovedHref = _href.substr(0, _href.length - 1);
             curBtn.attr("href", _secRemovedHref + sec);
         } else {
-            console.log("Failed");
             // disables clicking          
-           
             return false;
         }
 
