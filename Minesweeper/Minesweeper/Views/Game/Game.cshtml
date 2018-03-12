@@ -35,51 +35,60 @@
 
 <script>
 
+    var sec = @Game.Secs;
+
     // toggles flag 
     function flag(row, col, beenVisited) {
-        if (beenVisited === "False") {
+        
+        var curBtn = $('#' + row.toString() + "\\," + col.toString());
+               
+        if (beenVisited === "False" && curBtn.text() !== "F") {
             $.post("/Game/Row/Col", { Row: row, Col: col });
-            $(`#${row},${col}`).html("F");
+
+            if (curBtn === "F") {
+                curBtn.text(" ");
+                curBtn.unbind('click').click();
+            } else {
+                 curBtn.text("F");
+                 curBtn.on("click", (e) => { e.preventDefault()});
+           }
         }
+
+        return false;
+
     }
 
-    //resets flag functionality
-    function resetFlagAction() {
-        $(".btn-default").on("contextmenu", function (event) {
-            if ($(this).text() === " ") {
-                $(this).text("F");
-                $(this).on("click", (e) => { e.preventDefault(); });
-            }
-            else if ($(this).text() === "F") {
-                $(this).text(" ");
-                $(this).unbind('click').click();
-            }
-            return false;
-        });
-    }
+    function tileClick(row, col) {
+            
+        var curBtn = $('#' + row + "\\," + col);
+        
+        // stops user from clicking revealed tile
+        if (curBtn.text() === " " || curBtn.text() !== "F") {
+            var _href = curBtn.attr('href');
+            var _secRemovedHref = _href.substr(0, _href.length - 1);
+            curBtn.attr("href", _secRemovedHref + sec);
+        } else {
+            // disables clicking
+            curBtn.click((event) => {
+                event.preventDefault();
+                return false;
+            });
+        }
 
+    }
+    
 
     // checks too see if page can be modified safely
     $(document).ready(function () {
 
         var sec = parseInt(@Game.Secs);
 
+        $(this).bind("contextmenu", function (e) {
 
-        $(".btn-default").click(function (e) {
-
-            // stops user from clicking revealed tile
-            if ($(this).text() !== " ") {
-                e.preventDefault();
-            } else {
-                var _href = $(this).attr('href');
-                var _secRemovedHref = _href.substr(0, _href.length - 1);
-                $(this).attr("href", _secRemovedHref + sec);
-            }
+            e.preventDefault();
 
         });
-
-        resetFlagAction();
-    
+       
         // stops timer if uri indicates lost or won
         if (document.location.pathname !== "/Game/lost" && document.location.pathname !== "/Game/won") {
             // updates timer every second

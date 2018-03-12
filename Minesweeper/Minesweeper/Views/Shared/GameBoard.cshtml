@@ -1,5 +1,4 @@
 ﻿@using Minesweeper.Models
-@Model string
 @{
     var Game = GameModel.GetGameModelInstance();   
 }
@@ -36,14 +35,12 @@
                         {
                             UpdateTargetId="GameBoard",
                             InsertionMode = InsertionMode.Replace,
-                            HttpMethod = "GET",
-                            OnComplete = "resetFlagAction()",
-                            OnBegin = ""
-
+                            HttpMethod = "GET"
                         },
                         new {
                             id = $"{Cell.row},{Cell.col}",
                             oncontextmenu = $"flag({Cell.row},{Cell.col},'{Cell.BeenVisited}');",
+                            onclick = $"tileClick({Cell.row},{Cell.col});",
                             style = "width: 75px; height: 75px; float: left;",
                             @class="btn btn-default"
                         })
