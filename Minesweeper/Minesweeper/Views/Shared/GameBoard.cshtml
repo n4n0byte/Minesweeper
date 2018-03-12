@@ -47,21 +47,15 @@
 
     <script>
 
-        if ("@Model" === "Won") {
+        //shows user prompt to restart after a win/loss
+        if ("@Model" === "Won" || "@Model" === "Lost") {
             //stop timer
             clearInterval(interval);
-            if (confirm("You Won, Try Again?")) {
+            if (confirm("You @Model, Try Again?")) {
                 resetGame();
             }
         }
 
-        if ("@Model" === "Lost") {
-            //stop timer
-            clearInterval(interval);
-            if (confirm("You Lost, Try Again?")) {
-                resetGame();
-            }
-        }
 
     </script>
 
