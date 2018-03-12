@@ -45,15 +45,21 @@
         var curBtn = $('#' + row.toString() + "\\," + col.toString());
         
         // will toggle flag if tile hasnt been visited
-        if (curBtn.text() === '\xa0') {
+        if (curBtn.text() === '\xa0' || curBtn.text() === "F") {
             $.post("/Game/Row/Col", { Row: row, Col: col });
 
-            if (curBtn.text() === "F") {
+            if (curBtn.text() === 'F') {
                 curBtn.text(" ");
-               
+                               
             } else {
-                 curBtn.text("F");               
-           }
+
+                curBtn.text("F");
+
+                curBtn.click((e) => {
+                    e.preventDefault();
+                    return false;
+                });
+            }
         }
 
         return false;
@@ -72,11 +78,7 @@
         } else {
             console.log("Failed");
             // disables clicking          
-            curBtn.click((e) => {
-
-                e.preventDefault();
-                return false;
-            });
+           
             return false;
         }
 
