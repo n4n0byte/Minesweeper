@@ -22,12 +22,7 @@
     @Html.Partial("NavbarPartialView")
 </div>
 
-<div class="container" align="center" style="margin-top: 5%">
-    <h3 id="timer">
-        @Game.Secs<br>
-        Seconds
-    </h3>
-</div>
+@Html.Partial("Timer",Game.Secs)
          
 <div id="GameBoard">
     @Html.Partial("GameBoard",(Object)"Ongoing")        
@@ -98,7 +93,7 @@
 
     function startTimer() {
          // updates timer every second
-        interval = setInterval(function() {
+        interval = setInterval(function() {           
             $("#timer").html(++sec + "<br>Seconds");
         }, 1000);
     }            
