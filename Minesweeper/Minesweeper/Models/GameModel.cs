@@ -14,21 +14,19 @@ namespace Minesweeper.Models
         public bool HasWon { get; set; } = false;
         public bool HasLost { get; set; } = false;
 
-        private static Dictionary<int, GameModel> GameDict;
-
         private static GameModel Game = new GameModel();
 
         public static GameModel GetGameModelInstance() {
             return Game;
         }
 
+        /**
+         * 
+         */
         public static GameModel GetGameModelInstance(int id) {
 
-            if (!GameDict.ContainsKey(id)) {
-                GameDict.Add(id,new GameModel());
-            }
+            return Game;
 
-            return GameDict[id];
         }
 
         private GameModel() {

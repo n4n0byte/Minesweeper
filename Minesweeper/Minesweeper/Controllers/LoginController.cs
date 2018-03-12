@@ -26,7 +26,8 @@ namespace Minesweeper.Controllers
                 return RedirectToAction("Index", "Game");
             }
 
-            return View("LoginFailed");
+           
+            return RedirectToAction("Index");
         }
     }
 }

@@ -9,31 +9,26 @@
         {
             <div class="hidden-xs col-lg-3"></div>
             <div class="col-lg-7">
-                @for (var Col = 0; Col < Game.Cols; Col++)
-                {
+                @for (var Col = 0; Col < Game.Cols; Col++) {
                     var Cell = Game.Board[Row, Col];
                     var Value = " ";
 
-                    if (Cell.flagged && !Cell.BeenVisited)
-                    {
+                    if (Cell.flagged && !Cell.BeenVisited) {
                         Value = "F";
                     }
-                    else if (Cell.isLive && Cell.BeenVisited)
-                    {
+                    else if (Cell.isLive && Cell.BeenVisited) {
                         Value = "*";
                     }
-                    else if (Cell.BeenVisited)
-                    {
+                    else if (Cell.BeenVisited) {
                         Value = Cell.liveNeighbors.ToString();
                     }
 
                     @Ajax.ActionLink(@Value,
                         "Index",
                         "Game",
-                        new { Row = Cell.row, Col = Cell.col, Secs = 0 },
-                        new AjaxOptions
-                        {
-                            UpdateTargetId="GameBoard",
+                        new {Row = Cell.row, Col = Cell.col, Secs = 0},
+                        new AjaxOptions {
+                            UpdateTargetId = "GameBoard",
                             InsertionMode = InsertionMode.Replace,
                             HttpMethod = "GET"
                         },
@@ -42,7 +37,7 @@
                             oncontextmenu = $"flag({Cell.row},{Cell.col},'{Cell.BeenVisited}');",
                             onclick = $"tileClick({Cell.row},{Cell.col});",
                             style = "width: 75px; height: 75px; float: left;",
-                            @class="btn btn-default"
+                            @class = "btn btn-default"
                         })
                 }
 
@@ -52,6 +47,19 @@
     </div>
     
     <script>
+        
+        if ("@Model" === "Won") {           
+            if (confirm("You Won Try Again?")) {
+                resetGame();
+            }
+        }
+
+        if ("@Model" === "Lost") {
+            if (confirm("You Lost Try Again")) {
+                resetGame();
+            }
+        }
+
     </script>
 
 </div>

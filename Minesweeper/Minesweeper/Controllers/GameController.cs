@@ -20,29 +20,13 @@ namespace Minesweeper.Controllers
         [HttpGet]
         public ActionResult Index() {
             GameSvc.ResetBoard();
+
+            // if ajax request return partial view
+            if (Request.IsAjaxRequest()) {
+                return PartialView("GameBoard", (object) "Ongoing");
+            }
+
             return View("Game");
-        }
-
-        [HttpGet]
-        [Route("Game/{Result}")]
-        public ActionResult Index(String Result) {
-            
-            GameManagementService GameSvc = new GameManagementService();
-
-            if (Result.Equals("won")) {
-                //todo add extra functionality
-                GameSvc.RevealAll();
-                return View("Game");
-            }
-            else if (Result.Equals("lost")) {
-                //todo add extra functionality
-                GameSvc.RevealAll();
-                return View("Game");
-            }
-            else {
-                return View("Game");
-            }
-            
         }
 
         [HttpPost]
@@ -51,19 +35,22 @@ namespace Minesweeper.Controllers
         {
             GameManagementService GameSvc = new GameManagementService();
             Debug.WriteLine(Row);
-            GameSvc.ToggleFlag(Row,Col);
+            GameSvc.ToggleFlag(Row, Col);
 
-            return View("Game");
+            return PartialView("GameBoard", (Object)"Ongoing");
         }
+
 
         [HttpGet]
         [Route("Game/{Row}/{Col}/{Secs}")]
         public ActionResult Index(int Row, int Col, int Secs) {
 
             String GameStatus = "Ongoing";
-            GameManagementService GameSvc = new GameManagementService();
-
+            
+            // returns partial view with updated model and gamestatus 
             if (Request.IsAjaxRequest()) {
+
+                // processes action on gameboard
                 GameSvc.ProcessCell(Row, Col);
                 GameSvc.UpdateTime(Secs);
 

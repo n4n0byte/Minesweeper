@@ -32,25 +32,27 @@
 <div id="GameBoard">
     @Html.Partial("GameBoard",(Object)"Ongoing")        
 </div>
+    
 
 <script>
 
     var sec = @Game.Secs;
+    var interval = 0;
 
     // toggles flag 
     function flag(row, col, beenVisited) {
         
         var curBtn = $('#' + row.toString() + "\\," + col.toString());
-               
-        if (beenVisited === "False" && curBtn.text() !== "F") {
+        
+        // will toggle flag if tile hasnt been visited
+        if (curBtn.text() === '\xa0') {
             $.post("/Game/Row/Col", { Row: row, Col: col });
 
-            if (curBtn === "F") {
+            if (curBtn.text() === "F") {
                 curBtn.text(" ");
-                curBtn.unbind('click').click();
+               
             } else {
-                 curBtn.text("F");
-                 curBtn.on("click", (e) => { e.preventDefault()});
+                 curBtn.text("F");               
            }
         }
 
@@ -63,55 +65,49 @@
         var curBtn = $('#' + row + "\\," + col);
         
         // stops user from clicking revealed tile
-        if (curBtn.text() === " " || curBtn.text() !== "F") {
+        if (curBtn.text() === '\xa0') {
             var _href = curBtn.attr('href');
             var _secRemovedHref = _href.substr(0, _href.length - 1);
             curBtn.attr("href", _secRemovedHref + sec);
         } else {
-            // disables clicking
-            curBtn.click((event) => {
-                event.preventDefault();
+            console.log("Failed");
+            // disables clicking          
+            curBtn.click((e) => {
+
+                e.preventDefault();
                 return false;
             });
+            return false;
         }
 
     }
     
+    // reloads gameboard partialview and resets timer
+    function resetGame() {
+        clearInterval(interval);
+            $.ajax({
+                url: "/Game"
+            }).done(function (data) {
+                $("#GameBoard").html(data);
+                sec = -1;
+                startTimer();
+            });        
+    }
+
+    function startTimer() {
+         // updates timer every second
+        interval = setInterval(function() {
+            $("#timer").html(++sec + "<br>Seconds");
+        }, 1000);
+    }            
+    
 
     // checks too see if page can be modified safely
     $(document).ready(function () {
-
-        var sec = parseInt(@Game.Secs);
-
-        $(this).bind("contextmenu", function (e) {
-
-            e.preventDefault();
-
+        startTimer();
+        $(document).bind("contextmenu",function(e){
+            return false;
         });
-       
-        // stops timer if uri indicates lost or won
-        if (document.location.pathname !== "/Game/lost" && document.location.pathname !== "/Game/won") {
-            // updates timer every second
-            setInterval(function() {
-                $("#timer").html(++sec + "<br>Seconds");
-            }, 1000);
-        }
-            
-        else {
-
-            if (document.location.pathname === "/Game/lost") {
-                alert("You Lost");
-            }
-            if (document.location.pathname === "/Game/won") {
-                alert("You Won");
-            }
-
-            if (confirm("Start New Game?")) {
-                window.location = "/Game";
-            }
-
-        }
-
     });
 
 </script>    

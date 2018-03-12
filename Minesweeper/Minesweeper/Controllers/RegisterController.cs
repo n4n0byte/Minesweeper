@@ -8,7 +8,9 @@ using Minesweeper.Models;
 using Minesweeper.Services.Business;
 
 namespace Minesweeper.Controllers {
+
     public class RegisterController : Controller {
+
         [HttpGet]
         public ActionResult Index() {
             return View("Register");
@@ -18,13 +20,15 @@ namespace Minesweeper.Controllers {
         public ActionResult Register(UserModel user) {
             SecurityService service = new SecurityService();
 
+            // checks to see if user info is already in db
             if (service.CanRegister(user)) {
                 service.RegisterUser(user);
                 return View("RegisterSuccess");
             }
             else {
-                return View("RegisterFailed");
+                return View("Register");
             }
+
         }
     }
 }
