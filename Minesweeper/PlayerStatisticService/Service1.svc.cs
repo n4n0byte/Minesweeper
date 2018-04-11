@@ -20,6 +20,8 @@ namespace PlayerStatisticService
         }
 
         public DTO GetAllPlayerStats() {
+            // create default constructed DTO
+            // 
             throw new NotImplementedException();
         }
 
