@@ -4,42 +4,77 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.Ajax.Utilities;
 using Minesweeper.Models;
 using Minesweeper.Services.Business;
+using Minesweeper.ViewModels;
 
 namespace Minesweeper.Controllers
 {
     public class GameController : Controller {
 
-        private GameManagementService GameSvc;
+        private static string Username = System.Web.HttpContext.Current.Session["Username"] as string;
 
-        public GameController() { 
-            GameSvc = new GameManagementService();
-        }
+        private GameManagementService GameSvc = new GameManagementService(Username);
+
+        private GameStateViewModel GameViewModel = new GameStateViewModel(Username);
 
         [HttpGet]
         public ActionResult Index() {
-            GameSvc.ResetBoard();
 
+            
             // if ajax request return partial view
             if (Request.IsAjaxRequest()) {
-                return PartialView("GameBoard", (object) "Ongoing");
+                return PartialView("GameBoard", GameViewModel);
             }
 
-            return View("Game");
+            return View("Game",GameViewModel);
+
         }
 
         [HttpPost]
         [Route("Game/{Row}/{Col}")]
         public ActionResult Flag(int Row, int Col)
         {
-            GameManagementService GameSvc = new GameManagementService();
+
             Debug.WriteLine(Row);
             GameSvc.ToggleFlag(Row, Col);
 
-            return PartialView("GameBoard", (Object)"Ongoing");
+            
+            
+
+            return PartialView("GameBoard", GameViewModel );
         }
 
+        [HttpGet]
+        [Route("Game/Load")]
+        public ActionResult Load() {
+ 
+            // check if user has game stored in db already
+        
+            // check if instance of game is running
+            if (!GameSvc.hasStartedGame(Username)) {
+                GameSvc.ResetBoard();
+                
+            }
+         
+            // if user has game, load it otherwise make a new game
+
+            // TODO add load functionality 
+            return RedirectToAction("Index");
+
+        }
+
+        [HttpGet]
+        [Route("Game/Save")]
+        public ActionResult Save() {
+            
+            // serialize game state
+            // serialize player stats
+
+            // save both into db
+            return RedirectToAction("Index");
+        }
 
         [HttpGet]
         [Route("Game/{Row}/{Col}/{Secs}")]
@@ -54,14 +89,21 @@ namespace Minesweeper.Controllers
                 GameSvc.ProcessCell(Row, Col);
                 GameSvc.UpdateTime(Secs);
 
-                if (GameModel.GetGameModelInstance().HasWon) {
+                if (GameModel.GetGameModelInstance(Username).HasWon) {
                     GameStatus = "Won";
                 }
-                if (GameModel.GetGameModelInstance().HasLost) {
+                if (GameModel.GetGameModelInstance(Username).HasLost) {
                     GameStatus = "Lost";
                 }
 
-                return PartialView("GameBoard",(Object)GameStatus);
+                if (!GameStatus.Equals("Ongoing")) {
+                    
+                }
+
+                GameViewModel.Status = GameStatus;
+
+
+                return PartialView("GameBoard",GameViewModel);
             }
 
             return View("Game");

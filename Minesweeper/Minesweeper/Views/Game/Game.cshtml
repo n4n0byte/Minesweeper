@@ -1,9 +1,8 @@
 ﻿@using System.Activities.Statements
 @using Minesweeper.Models
-
+@model Minesweeper.ViewModels.GameStateViewModel
 @{
     Layout = null;
-    var Game = GameModel.GetGameModelInstance();
 }
 
 <!DOCTYPE html>
@@ -22,16 +21,16 @@
     @Html.Partial("NavbarPartialView")
 </div>
 
-@Html.Partial("Timer",Game.Secs)
+@Html.Partial("Timer",Model.Game.Secs)
          
 <div id="GameBoard">
-    @Html.Partial("GameBoard",(Object)"Ongoing")        
+    @Html.Partial("GameBoard",Model)        
 </div>
     
 
 <script>
 
-    var sec = @Game.Secs;
+    var sec = @Model.Game.Secs;
     var interval = 0;
 
     // toggles flag 

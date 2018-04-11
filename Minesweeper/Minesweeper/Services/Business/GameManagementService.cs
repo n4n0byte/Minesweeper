@@ -4,14 +4,41 @@ using Minesweeper.Models;
 
 namespace Minesweeper.Services.Business {
     public class GameManagementService {
-        private readonly GameModel Game = GameModel.GetGameModelInstance();
-        private readonly Random Rand = new Random();
 
+        private GameModel Game;
+        private Random Rand = new Random();
+
+        /**
+         * creates a game usig user id
+         */
+        public GameManagementService(string Username) {
+           
+            Game = GameModel.GetGameModelInstance(Username);
+
+        }
+
+        public bool hasStartedGame(string Username) {
+
+            return GameModel.HasGame(Username);
+
+        }
+
+        /**
+         * removes game from name - Gameodel dict
+         */
+        public void removeGame(string username) {
+            GameModel.RemoveGame(username);
+        }
+
+        /**
+         * Resets Game State
+         */
         public void ResetBoard() {
 
             // reset win loss bools
             Game.HasLost = false;
             Game.HasWon = false;
+            Game.Started = true;
 
             Game.Secs = 0;
 

@@ -1,57 +1,53 @@
 ﻿@using Minesweeper.Models
-@{
-    var Game = GameModel.GetGameModelInstance();
-}
+@model Minesweeper.ViewModels.GameStateViewModel
+
 <div class="container" style="margin-top: 2%;">
 
-    <div class="form-horizontal">
-        @for (var Row = 0; Row < Game.Rows; Row++) {
-            <div class="hidden-xs col-lg-3"></div>
-            <div class="col-lg-7">
-                @for (var Col = 0; Col < Game.Cols; Col++) {
-                    var Cell = Game.Board[Row, Col];
-                    var Value = " ";
+    @for (var Row = 0; Row < Model.Game.Rows; Row++) {
+        <div class="hidden-xs col-lg-3"></div>
+        <div class="col-lg-7">
+            @for (var Col = 0; Col < Model.Game.Cols; Col++) {
+                var Cell = Model.Game.Board[Row, Col];
+                var Value = " ";
 
-                    if (Cell.flagged && !Cell.BeenVisited) {
-                        Value = "F";
-                    }
-                    else if (Cell.isLive && Cell.BeenVisited) {
-                        Value = "*";
-                    }
-                    else if (Cell.BeenVisited) {
-                        Value = Cell.liveNeighbors.ToString();
-                    }
-
-                    @Ajax.ActionLink(@Value,
-                        "Index",
-                        "Game",
-                        new {Row = Cell.row, Col = Cell.col, Secs = 0},
-                        new AjaxOptions {
-                            UpdateTargetId = "GameBoard",
-                            InsertionMode = InsertionMode.Replace,
-                            HttpMethod = "GET"
-                        },
-                        new {
-                            id = $"{Cell.row},{Cell.col}",
-                            oncontextmenu = $"flag({Cell.row},{Cell.col},'{Cell.BeenVisited}');",
-                            onclick = $"tileClick({Cell.row},{Cell.col});",
-                            style = "width: 75px; height: 75px; float: left;",
-                            @class = "btn btn-default"
-                        })
+                if (Cell.flagged && !Cell.BeenVisited) {
+                    Value = "F";
+                }
+                else if (Cell.isLive && Cell.BeenVisited) {
+                    Value = "*";
+                }
+                else if (Cell.BeenVisited) {
+                    Value = Cell.liveNeighbors.ToString();
                 }
 
-            </div>
-        }
+                @Ajax.ActionLink(@Value,
+                    "Index",
+                    "Game",
+                    new {Row = Cell.row, Col = Cell.col, Secs = 0},
+                    new AjaxOptions {
+                        UpdateTargetId = "GameBoard",
+                        InsertionMode = InsertionMode.Replace,
+                        HttpMethod = "GET"
+                    },
+                    new {
+                        id = $"{Cell.row},{Cell.col}",
+                        oncontextmenu = $"flag({Cell.row},{Cell.col},'{Cell.BeenVisited}');",
+                        onclick = "tileClick({Cell.row},{Cell.col});",
+                        style = "width: 75px; height: 75px; float: left;",
+                        @class = "btn btn-default"
+                    })
+            }
 
-    </div>
+        </div>
+    }
 
     <script>
 
         //shows user prompt to restart after a win/loss
-        if ("@Model" === "Won" || "@Model" === "Lost") {
+        if ("@Model.Status" === "Won" || "@Model.Status" === "Lost") {
             //stop timer
             clearInterval(interval);
-            if (confirm("You @Model, Try Again?")) {
+            if (confirm("You @Model.Status, Try Again?")) {
                 resetGame();
             }
         }

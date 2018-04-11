@@ -212,12 +212,16 @@
     <Compile Include="Models\Cell.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\PlayerStatModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Business\GameManagementService.cs" />
+    <Compile Include="Services\Business\GameStateManagementService.cs" />
     <Compile Include="Services\Business\SecurityService.cs" />
+    <Compile Include="Services\Data\GameStateDAO.cs" />
     <Compile Include="Services\Data\SecurityDAO.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\GameStateViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
