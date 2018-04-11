@@ -27,8 +27,8 @@ namespace Minesweeper.Controllers {
             if (service.Authenticate(model)) {
                 System.Web.HttpContext.Current.Session["Username"] = model.Username;
                 System.Web.HttpContext.Current.Session["ID"] = service.GetUserId(model);
-
-                return RedirectToAction("Load", "Game");
+                
+                return RedirectToAction("Index", "Game");
             }
 
             return RedirectToAction("Index");

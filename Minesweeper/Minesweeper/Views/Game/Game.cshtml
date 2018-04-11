@@ -1,6 +1,6 @@
 ﻿@using System.Activities.Statements
 @using Minesweeper.Models
-@model Minesweeper.ViewModels.GameStateViewModel
+@model Minesweeper.CompositeModels.GameStateViewModel
 @{
     Layout = null;
 }
@@ -21,7 +21,7 @@
     @Html.Partial("NavbarPartialView")
 </div>
 
-@Html.Partial("Timer",Model.Game.Secs)
+@Html.Partial("Timer",Model.Game)
          
 <div id="GameBoard">
     @Html.Partial("GameBoard",Model)        
@@ -70,6 +70,7 @@
             var _href = curBtn.attr('href');
             var _secRemovedHref = _href.substr(0, _href.length - 1);
             curBtn.attr("href", _secRemovedHref + sec);
+            console.log(sec);
         } else {
             // disables clicking          
             return false;
@@ -80,6 +81,7 @@
     // reloads gameboard partialview and resets timer
     function resetGame() {
         clearInterval(interval);
+            $.get("/Game/Reset");
             $.ajax({
                 url: "/Game"
             }).done(function (data) {
@@ -88,6 +90,22 @@
                 startTimer();
             });        
     }
+    
+
+
+    // reloads gameboard partialview and resets timer
+    function saveGame() {
+        
+        $.ajax({
+            url: "/Game/Save"
+        }).done(function (data) {
+            $("#GameBoard").html(data);  
+            sec = @Model.Game.Secs;
+            clearInterval(interval);
+            startTimer();
+        });        
+    }
+
 
     function startTimer() {
          // updates timer every second

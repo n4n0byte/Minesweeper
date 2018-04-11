@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Minesweeper.CompositeModels.GameStateViewModel">
+    <Position X="12.25" Y="4.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompositeModels\GameStateViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Minesweeper.Controllers.GameController">
+    <Position X="2.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQIAAAAAAhAAAQAAAAACAAAAAAgAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\GameController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="GameStateSvc" />
+      <Field Name="GameViewModel" />
+      <Field Name="GameSvc" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Minesweeper.Controllers.LoginController">
+    <Position X="2.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQAAAAAAA=</HashCode>
+      <FileName>Controllers\LoginController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Minesweeper.Controllers.RegisterController">
+    <Position X="2.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\RegisterController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Minesweeper.Models.PlayerStatModel">
+    <Position X="14.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAQAAIAAAAAAA=</HashCode>
+      <FileName>Models\PlayerStatModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Minesweeper.Models.UserModel">
+    <Position X="10.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAACAAhAAAAUAAAAAAAAAAAAACAAAABAAAAAg=</HashCode>
+      <FileName>Models\UserModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Minesweeper.Services.Business.GameManagementService">
+    <Position X="4.75" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>gAAAQQAgAAAAAwAAARAABAAQAAgAQAAAAAACAAgAEAA=</HashCode>
+      <FileName>Services\Business\GameManagementService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="Game" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Minesweeper.Services.Business.GameStateManagementService">
+    <Position X="7.25" Y="0.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAQAAAAAAAAAAAAAAAAAAAAgAAIAAAAAAAAAA=</HashCode>
+      <FileName>Services\Business\GameStateManagementService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="GameSvc" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Minesweeper.Services.Data.GameStateDAO">
+    <Position X="11.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAggAAAAQAAAEAAAAAAAAIAAAAAAIAAA=</HashCode>
+      <FileName>Services\Data\GameStateDAO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Minesweeper.Services.Data.SecurityDAO">
+    <Position X="1" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAQAAAAAgAAAAAAACAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\Data\SecurityDAO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Minesweeper.Models.GameModel">
+    <Position X="7.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQEAAAAAAAAAAEAAAACACIAQAAIAAABAACACQCAAAgA=</HashCode>
+      <FileName>Models\GameModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

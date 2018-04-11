@@ -1,5 +1,5 @@
 ﻿@using Minesweeper.Models
-@model Minesweeper.ViewModels.GameStateViewModel
+@model Minesweeper.CompositeModels.GameStateViewModel
 
 <div class="container" style="margin-top: 2%;">
 
@@ -32,7 +32,7 @@
                     new {
                         id = $"{Cell.row},{Cell.col}",
                         oncontextmenu = $"flag({Cell.row},{Cell.col},'{Cell.BeenVisited}');",
-                        onclick = "tileClick({Cell.row},{Cell.col});",
+                        onclick = $"tileClick({Cell.row},{Cell.col});",
                         style = "width: 75px; height: 75px; float: left;",
                         @class = "btn btn-default"
                     })

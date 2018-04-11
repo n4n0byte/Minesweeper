@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 
 namespace Minesweeper.Models
 {
@@ -35,7 +36,8 @@ namespace Minesweeper.Models
         [DataMember]
         public bool Started { get; set; } = false;
 
-        [DataMember]
+        [JsonIgnore]
+        [IgnoreDataMember]
         private static Dictionary<int,GameModel> UserGameDictionary =  new Dictionary<int, GameModel>();
 
         
@@ -55,6 +57,12 @@ namespace Minesweeper.Models
 
         }
 
+        public static void ReplaceGame(int ID, GameModel InGame) {
+
+            UserGameDictionary.Remove(ID);
+            UserGameDictionary[ID] = InGame;
+
+        }
 
 
         /**
@@ -91,7 +99,7 @@ namespace Minesweeper.Models
          */
         public static bool HasGame(int ID) {
 
-            if (UserGameDictionary.ContainsKey(ID)) return true;
+            if (UserGameDictionary[ID].Started) return true;
             return false;
 
         }

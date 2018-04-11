@@ -1,29 +1,27 @@
-﻿    using System;
+﻿    
+using System;
 using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Diagnostics;
-    using System.Linq;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
 using System.Web;
-    using Minesweeper.Models;
+using Minesweeper.Models;
 
 namespace Minesweeper.Services.Data {
     public class GameStateDAO {
         private string connectionString =
-                @"Data Source=(localdb)\MSSQLLocalDB;Integrated Security=True;Connect Timeout=15;Encrypt=False;
+            @"Data Source=(localdb)\MSSQLLocalDB;Integrated Security=True;Connect Timeout=15;Encrypt=False;
                   TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
         public bool PlayerIDInDatabase(int PlayerID) {
-
             bool PlayerIdInDB = false;
 
-            try
-            {
+            try {
                 string query = "use Minesweeper; SELECT * from dbo.GameState where player_id = @PlayerID";
                 //Create connection and command
                 using (SqlConnection cn = new SqlConnection(connectionString))
-                using (SqlCommand cmd = new SqlCommand(query, cn))
-                {
+                using (SqlCommand cmd = new SqlCommand(query, cn)) {
                     //Open the connection
                     cn.Open();
 
@@ -31,18 +29,15 @@ namespace Minesweeper.Services.Data {
                     cmd.Parameters.Add("@PlayerID", SqlDbType.Int).Value = PlayerID;
 
                     using (SqlDataReader Reader = cmd.ExecuteReader()) {
-
                         if (Reader.Read()) {
                             PlayerIdInDB = true;
                         }
-
                     }
 
                     int result = cmd.ExecuteNonQuery();
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Debug.WriteLine(e.StackTrace);
             }
 
@@ -52,42 +47,70 @@ namespace Minesweeper.Services.Data {
 
 
         public PlayerStatModel GetPlayerStatModelById(int PlayerID) {
-
             PlayerStatModel Result = null;
 
-            try
-            {
-                string query = "use Minesweeper; SELECT player_id, number_of_clicks, seconds_playing from dbo.GameState where player_id = @player_id;";
+            try {
+                string query =
+                    "use Minesweeper; SELECT player_id, number_of_clicks, seconds_playing from dbo.GameState where player_id = @player_id;";
                 //Create connection and command
                 using (SqlConnection cn = new SqlConnection(connectionString))
-                using (SqlCommand cmd = new SqlCommand(query, cn))
-                {
+                using (SqlCommand cmd = new SqlCommand(query, cn)) {
                     //Open the connection
                     cn.Open();
 
                     cmd.Parameters.AddWithValue("@player_id", PlayerID);
 
                     // use a reader to get all rows from db
-                    using (SqlDataReader Reader = cmd.ExecuteReader())
-                    {
-
-                        if (Reader.HasRows)
-                        {
+                    using (SqlDataReader Reader = cmd.ExecuteReader()) {
+                        if (Reader.HasRows) {
                             // fill Stats List with Every Player
-                            while (Reader.Read())
-                            {
-                                Result = new PlayerStatModel(Reader.GetInt32(0), Reader.GetInt32(1), Reader.GetInt32(2));
+                            while (Reader.Read()) {
+                                Result = new PlayerStatModel(Reader.GetInt32(0), Reader.GetInt32(1),
+                                    Reader.GetInt32(2));
                                 break;
                             }
                         }
-
                     }
 
                     int result = cmd.ExecuteNonQuery();
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
+                Debug.WriteLine(e.StackTrace);
+            }
+
+
+            return Result;
+        }
+
+        public string GetGameJsonByID(int PlayerID) {
+            string Result = null;
+
+            try {
+                string query = "use Minesweeper; SELECT game_json from dbo.GameState where player_id = @player_id;";
+                //Create connection and command
+                using (SqlConnection cn = new SqlConnection(connectionString))
+                using (SqlCommand cmd = new SqlCommand(query, cn)) {
+                    //Open the connection
+                    cn.Open();
+
+                    cmd.Parameters.AddWithValue("@player_id", PlayerID);
+
+                    // use a reader to get all rows from db
+                    using (SqlDataReader Reader = cmd.ExecuteReader()) {
+                        if (Reader.HasRows) {
+                            // fill Stats List with Every Player
+                            while (Reader.Read()) {
+                                Result = Reader.GetString(0);
+                                break;
+                            }
+                        }
+                    }
+
+                    int result = cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e) {
                 Debug.WriteLine(e.StackTrace);
             }
 
@@ -99,37 +122,33 @@ namespace Minesweeper.Services.Data {
          * returns a list of PlayerStats
          */
         public List<PlayerStatModel> GetAllPlayerStats() {
-
             List<PlayerStatModel> Stats = new List<PlayerStatModel>();
-            
-            try
-            {
-                string query = "use Minesweeper; SELECT player_id, number_of_clicks, seconds_playing from dbo.GameState;";
+
+            try {
+                string query =
+                    "use Minesweeper; SELECT player_id, number_of_clicks, seconds_playing from dbo.GameState;";
                 //Create connection and command
                 using (SqlConnection cn = new SqlConnection(connectionString))
-                using (SqlCommand cmd = new SqlCommand(query, cn))
-                {
+                using (SqlCommand cmd = new SqlCommand(query, cn)) {
                     //Open the connection
                     cn.Open();
 
                     // use a reader to get all rows from db
                     using (SqlDataReader Reader = cmd.ExecuteReader()) {
-
                         if (Reader.HasRows) {
                             // fill Stats List with Every Player
                             while (Reader.Read()) {
-                                PlayerStatModel Tmp = new PlayerStatModel(Reader.GetInt32(0),Reader.GetInt32(1), Reader.GetInt32(2));
+                                PlayerStatModel Tmp =
+                                    new PlayerStatModel(Reader.GetInt32(0), Reader.GetInt32(1), Reader.GetInt32(2));
                                 Stats.Add(Tmp);
                             }
                         }
-
                     }
 
                     int result = cmd.ExecuteNonQuery();
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Debug.WriteLine(e.StackTrace);
             }
 
@@ -143,14 +162,13 @@ namespace Minesweeper.Services.Data {
          * jsonified stats
          */
         public void UpdateGameState(int PlayerID, string GameJson, PlayerStatModel Stat) {
-            string query = "use Minesweeper; UPDATE dbo.GameState  SET game_json = @GameJson, number_of_clicks = @number_of_clicks, seconds_playing = @seconds_playing  WHERE ID = @PlayerID; ";
+            string query =
+                "use Minesweeper; UPDATE dbo.GameState  SET game_json = @GameJson, number_of_clicks = @number_of_clicks, seconds_playing = @seconds_playing  WHERE player_id = @PlayerID; ";
 
-            try
-            {
+            try {
                 //Create connection and command
                 using (SqlConnection cn = new SqlConnection(connectionString))
-                using (SqlCommand cmd = new SqlCommand(query, cn))
-                {
+                using (SqlCommand cmd = new SqlCommand(query, cn)) {
                     //Open the connection
                     cn.Open();
 
@@ -163,14 +181,10 @@ namespace Minesweeper.Services.Data {
                     int result = cmd.ExecuteNonQuery();
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Console.WriteLine(e.StackTrace);
             }
-
-
         }
-
 
 
         /**
@@ -178,16 +192,21 @@ namespace Minesweeper.Services.Data {
          * then inserts them into the database
          */
         public void InsertGameState(int PlayerID, string GameJson, PlayerStatModel Stat) {
+            if (PlayerIDInDatabase(PlayerID)) {
+                Console.WriteLine("In Update");
+                UpdateGameState(PlayerID, GameJson, Stat);
+                return;
+            }
 
-            string query = @"use Minesweeper; INSERT INTO dbo.GameState (player_id, game_json, number_of_clicks,seconds_playing ) 
+
+            string query =
+                @"use Minesweeper; INSERT INTO dbo.GameState (player_id, game_json, number_of_clicks,seconds_playing ) 
                             VALUES(@player_id, @game_json, @number_of_clicks, @seconds_playing);";
 
-            try
-            {
+            try {
                 //Create connection and command
                 using (SqlConnection cn = new SqlConnection(connectionString))
-                using (SqlCommand cmd = new SqlCommand(query, cn))
-                {
+                using (SqlCommand cmd = new SqlCommand(query, cn)) {
                     //Open the connection
                     cn.Open();
 
@@ -200,12 +219,9 @@ namespace Minesweeper.Services.Data {
                     int result = cmd.ExecuteNonQuery();
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Debug.WriteLine(e.StackTrace);
             }
-
         }
-
     }
 }

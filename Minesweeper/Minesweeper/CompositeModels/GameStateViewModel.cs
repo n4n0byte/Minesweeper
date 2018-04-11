@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Minesweeper.Models;
+﻿using Minesweeper.Models;
 
-namespace Minesweeper.ViewModels
+namespace Minesweeper.CompositeModels
 {
     public class GameStateViewModel
     {
