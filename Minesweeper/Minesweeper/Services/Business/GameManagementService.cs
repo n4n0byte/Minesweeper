@@ -11,23 +11,23 @@ namespace Minesweeper.Services.Business {
         /**
          * creates a game usig user id
          */
-        public GameManagementService(string Username) {
+        public GameManagementService(int ID) {
            
-            Game = GameModel.GetGameModelInstance(Username);
+            Game = GameModel.GetGameModelInstance(ID);
 
         }
 
-        public bool hasStartedGame(string Username) {
+        public bool hasStartedGame(int ID) {
 
-            return GameModel.HasGame(Username);
+            return GameModel.HasGame(ID);
 
         }
 
         /**
          * removes game from name - Gameodel dict
          */
-        public void removeGame(string username) {
-            GameModel.RemoveGame(username);
+        public void removeGame(int ID) {
+            GameModel.RemoveGame(ID);
         }
 
         /**

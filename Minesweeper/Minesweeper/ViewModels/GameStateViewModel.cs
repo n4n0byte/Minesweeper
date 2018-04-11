@@ -13,9 +13,9 @@ namespace Minesweeper.ViewModels
 
         public string Status { get; set; } = "Ongoing";
 
-        public GameStateViewModel(string Username)
+        public GameStateViewModel(int ID)
         {
-            this.Game = GameModel.GetGameModelInstance(Username);
+            this.Game = GameModel.GetGameModelInstance(ID);
         }
 
 

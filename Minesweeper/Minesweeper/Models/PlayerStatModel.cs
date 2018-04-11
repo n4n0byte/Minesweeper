@@ -19,8 +19,17 @@ namespace Minesweeper.Models
             TimeSpent = timeSpent;
         }
 
+        public PlayerStatModel(int playerId, int numberOfClicks, int timeSpent) {
+            PlayerId = playerId;
+            NumberOfClicks = numberOfClicks;
+            TimeSpent = timeSpent;
+        }
+
         public PlayerStatModel() {
         }
+
+        [DataMember]
+        public int PlayerId { get; set; }
 
         [DataMember]
         public int NumberOfClicks { get; set; }

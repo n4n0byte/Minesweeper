@@ -9,6 +9,9 @@ namespace Minesweeper.Models
 {
     public class UserModel
     {
+
+        public int ID { get; set; }
+
         [StringLength(50, MinimumLength = 3)]
         [Required]
         public string Username { get; set; }

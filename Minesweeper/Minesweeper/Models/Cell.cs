@@ -1,26 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Minesweeper {
+
+    [DataContract]
     public class Cell {
 
+        [DataMember]
         [JsonProperty("row")]
         public int row { get; set; }
 
+        [DataMember]
         [JsonProperty("col")]
         public int col { get; set; }
 
+        [DataMember]
         public int liveNeighbors { get; set; }
 
+        [DataMember]
         [JsonProperty("beenVisited")]
         public bool BeenVisited { get; set; } = false;
 
+        [DataMember]
         public bool isLive { get; set; }
 
+        [DataMember]
         [JsonProperty("flagged")]
         public bool flagged { get; set; } = false;
 

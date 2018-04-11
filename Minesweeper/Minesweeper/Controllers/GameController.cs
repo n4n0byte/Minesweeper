@@ -13,11 +13,13 @@ namespace Minesweeper.Controllers
 {
     public class GameController : Controller {
 
-        private static string Username = System.Web.HttpContext.Current.Session["Username"] as string;
+        private static int ID = (int)System.Web.HttpContext.Current.Session["ID"];
 
-        private GameManagementService GameSvc = new GameManagementService(Username);
+        private GameManagementService GameSvc = new GameManagementService(ID);
 
-        private GameStateViewModel GameViewModel = new GameStateViewModel(Username);
+        private GameStateViewModel GameViewModel = new GameStateViewModel(ID);
+
+
 
         [HttpGet]
         public ActionResult Index() {
@@ -53,7 +55,7 @@ namespace Minesweeper.Controllers
             // check if user has game stored in db already
         
             // check if instance of game is running
-            if (!GameSvc.hasStartedGame(Username)) {
+            if (!GameSvc.hasStartedGame(ID)) {
                 GameSvc.ResetBoard();
                 
             }
@@ -68,9 +70,13 @@ namespace Minesweeper.Controllers
         [HttpGet]
         [Route("Game/Save")]
         public ActionResult Save() {
+
+
+            
+            // extract playerstats
             
             // serialize game state
-            // serialize player stats
+
 
             // save both into db
             return RedirectToAction("Index");
@@ -89,10 +95,10 @@ namespace Minesweeper.Controllers
                 GameSvc.ProcessCell(Row, Col);
                 GameSvc.UpdateTime(Secs);
 
-                if (GameModel.GetGameModelInstance(Username).HasWon) {
+                if (GameModel.GetGameModelInstance(ID).HasWon) {
                     GameStatus = "Won";
                 }
-                if (GameModel.GetGameModelInstance(Username).HasLost) {
+                if (GameModel.GetGameModelInstance(ID).HasLost) {
                     GameStatus = "Lost";
                 }
 

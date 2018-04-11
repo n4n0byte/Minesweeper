@@ -1,40 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
 using System.Web.Script.Serialization;
 
 namespace Minesweeper.Models
 {
     [Serializable]
+    [DataContract]
     public class GameModel {
 
+        [DataMember]
         public Cell[,] Board { get; set; }
+
+        [DataMember]
         public int Rows { get; set; } = 7;
+
+        [DataMember]
         public int Cols { get; set; } = 7;
+
+        [DataMember]  
         public int Secs { get; set; } = 0;
+
+        [DataMember]
         public bool HasWon { get; set; } = false;
+
+        [DataMember]
         public bool HasLost { get; set; } = false;
+
+        [DataMember]
         public int Clicks { get; set; } = 0;
+
+        [DataMember]
         public bool Started { get; set; } = false;
 
-
-        private static Dictionary<string,GameModel> UserGameDictionary =  new Dictionary<string, GameModel>();
+        [DataMember]
+        private static Dictionary<int,GameModel> UserGameDictionary =  new Dictionary<int, GameModel>();
 
         
 
         /**
-         * Constructs a new Game per Username
+         * Constructs a new Game per ID
          */
-        public static GameModel GetGameModelInstance(string Username) {
+        public static GameModel GetGameModelInstance(int ID) {
 
             // lazily initialize a game according to username
-            if (!UserGameDictionary.ContainsKey(Username)) {
-                UserGameDictionary.Add(Username, new GameModel());
+            if (!UserGameDictionary.ContainsKey(ID)) {
+                UserGameDictionary.Add(ID, new GameModel());
             }
 
 
-            return UserGameDictionary[Username];
+            return UserGameDictionary[ID];
 
         }
 
@@ -44,18 +61,18 @@ namespace Minesweeper.Models
          * Deserializes a game and stores/updates
          * the UserGameDict
          */
-        public static void DeserializeAndRegisterGame(string Username, string SerializedGame) {
+        public static void DeserializeAndRegisterGame(int ID, string SerializedGame) {
 
             JavaScriptSerializer JSDeserializer = new JavaScriptSerializer();
 
             GameModel DeserializedGame = JSDeserializer.Deserialize<GameModel>(SerializedGame);
 
-            // either replace game dictionary at Username
+            // either replace game dictionary at ID
             // or insert a game
-            if (!UserGameDictionary.ContainsKey(Username)) {
-                UserGameDictionary.Add(Username, new GameModel());
+            if (!UserGameDictionary.ContainsKey(ID)) {
+                UserGameDictionary.Add(ID, new GameModel());
             } else {
-                UserGameDictionary[Username] = DeserializedGame;
+                UserGameDictionary[ID] = DeserializedGame;
             }
 
         }
@@ -63,18 +80,18 @@ namespace Minesweeper.Models
         /**
          * removes game from dictionary
          */
-        public static void RemoveGame(string Username) {
+        public static void RemoveGame(int ID) {
 
-            UserGameDictionary[Username] = null;
+            UserGameDictionary[ID] = null;
 
         }
 
         /**
          * checks to see if user has started a game
          */
-        public static bool HasGame(string Username) {
+        public static bool HasGame(int ID) {
 
-            if (UserGameDictionary.ContainsKey(Username)) return true;
+            if (UserGameDictionary.ContainsKey(ID)) return true;
             return false;
 
         }

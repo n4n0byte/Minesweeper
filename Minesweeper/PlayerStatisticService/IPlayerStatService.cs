@@ -19,7 +19,7 @@ namespace PlayerStatisticService
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "GetPlayerStat/{id}")]
-        DTO GetUser(int id);
+        DTO GetPlayerStat(string id);
 
 
     }

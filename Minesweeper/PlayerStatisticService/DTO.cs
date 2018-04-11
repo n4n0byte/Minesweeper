@@ -18,6 +18,10 @@ namespace PlayerStatisticService
             this.Data = Data;
         }
 
+        public DTO() {
+            
+        }
+
         [DataMember]
         public int Status { get; set; }
         
