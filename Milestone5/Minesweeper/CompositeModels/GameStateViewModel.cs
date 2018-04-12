@@ -2,9 +2,6 @@
 
 namespace Minesweeper.CompositeModels
 {
-    /**
-     * 
-     */
     public class GameStateViewModel
     {
 

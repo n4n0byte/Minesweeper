@@ -8,10 +8,12 @@ using System.Text;
 using Minesweeper.Models;
 using Minesweeper.Services.Data;
 
-namespace PlayerStatisticService {
+namespace PlayerStatisticService
+{
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "PlayerStatService" in code, svc and config file together.
     // NOTE: In order to launch WCF Test Client for testing this service, please select PlayerStatService.svc or PlayerStatService.svc.cs at the Solution Explorer and start debugging.
     public class PlayerStatService : IPlayerStatService {
+
         private GameStateDAO GameStateSvc;
 
         public PlayerStatService() {
@@ -19,29 +21,26 @@ namespace PlayerStatisticService {
         }
 
         public DTO GetAllPlayerStats() {
+           
             int StatusCode = 0;
             String Message = "Success";
-            List<PlayerStatModel> Results = null;
+            List<PlayerStatModel> Results = GameStateSvc.GetAllPlayerStats();
 
-            try {
-                List<PlayerStatModel> Results = GameStateSvc.GetAllPlayerStats();
 
-                // set status and message codes if nothing is returned
-                if (Results.Count == 0) {
-                    StatusCode = -1;
-                    Message = "No Player Stats In DB";
-                }
-
-            } catch (Exception e) {
-                // set error if exception is thrown
-                // set Message to this
+            // set error if exception is thrown 
+            if (Results == null) {
                 StatusCode = -2;
-                Message = $"Server Error\n{e.StackTrace}";
+                Message = "Error On Server Side";
                 Results = new List<PlayerStatModel>();
             }
-
+            // set status and message codes if nothing is returned
+            else if (Results.Count == 0) {
+                StatusCode = -1;
+                Message = "No Player Stats In DB";
+            }
 
             return new DTO(StatusCode, Message, Results);
+
         }
 
         public DTO GetPlayerStat(string id) {
@@ -56,8 +55,8 @@ namespace PlayerStatisticService {
             if (Int32.TryParse(id, out IdNum) == false) {
                 StatusCode = -2;
                 Message = "Error, not a number";
-            }
-            else {
+            } else {
+
                 Result = GameStateSvc.GetPlayerStatModelById(IdNum);
 
                 if (Result == null) {
@@ -68,6 +67,8 @@ namespace PlayerStatisticService {
                 else {
                     Results.Add(Result);
                 }
+
+
             }
 
             return new DTO(StatusCode, Message, Results);

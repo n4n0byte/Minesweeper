@@ -124,28 +124,32 @@ namespace Minesweeper.Services.Data {
         public List<PlayerStatModel> GetAllPlayerStats() {
             List<PlayerStatModel> Stats = new List<PlayerStatModel>();
 
+            try {
+                string query =
+                    "use Minesweeper; SELECT player_id, number_of_clicks, seconds_playing from dbo.GameState;";
+                //Create connection and command
+                using (SqlConnection cn = new SqlConnection(connectionString))
+                using (SqlCommand cmd = new SqlCommand(query, cn)) {
+                    //Open the connection
+                    cn.Open();
 
-            string query =
-                "use Minesweeper; SELECT player_id, number_of_clicks, seconds_playing from dbo.GameState;";
-            //Create connection and command
-            using (SqlConnection cn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(query, cn)) {
-                //Open the connection
-                cn.Open();
-
-                // use a reader to get all rows from db
-                using (SqlDataReader Reader = cmd.ExecuteReader()) {
-                    if (Reader.HasRows) {
-                        // fill Stats List with Every Player
-                        while (Reader.Read()) {
-                            PlayerStatModel Tmp =
-                                new PlayerStatModel(Reader.GetInt32(0), Reader.GetInt32(1), Reader.GetInt32(2));
-                            Stats.Add(Tmp);
+                    // use a reader to get all rows from db
+                    using (SqlDataReader Reader = cmd.ExecuteReader()) {
+                        if (Reader.HasRows) {
+                            // fill Stats List with Every Player
+                            while (Reader.Read()) {
+                                PlayerStatModel Tmp =
+                                    new PlayerStatModel(Reader.GetInt32(0), Reader.GetInt32(1), Reader.GetInt32(2));
+                                Stats.Add(Tmp);
+                            }
                         }
                     }
-                }
 
-                int result = cmd.ExecuteNonQuery();
+                    int result = cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e) {
+                Debug.WriteLine(e.StackTrace);
             }
 
 

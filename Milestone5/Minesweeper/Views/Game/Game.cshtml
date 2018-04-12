@@ -1,0 +1,129 @@
+﻿@using System.Activities.Statements
+@using Minesweeper.Models
+@model Minesweeper.CompositeModels.GameStateViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width initial-scale=1"/>
+    <link href="@Url.Content("~/Content/bootstrap.css")" rel="stylesheet"/>
+    <script type="text/javascript" src="~/Content/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
+    <title>Game</title>
+</head>
+<body>
+    
+<div id="navbar">
+    @Html.Partial("NavbarPartialView")
+</div>
+
+@Html.Partial("Timer",Model.Game)
+         
+<div id="GameBoard">
+    @Html.Partial("GameBoard",Model)        
+</div>
+    
+
+<script>
+
+    var sec = @Model.Game.Secs;
+    var interval = 0;
+
+    // toggles flag 
+    function flag(row, col, beenVisited) {
+        
+        var curBtn = $('#' + row.toString() + "\\," + col.toString());
+        
+        // will toggle flag if tile hasnt been visited
+        if (curBtn.text() === '\xa0' || curBtn.text() === "F") {
+            $.post("/Game/Row/Col", { Row: row, Col: col });
+
+            if (curBtn.text() === 'F') {
+                curBtn.text(" ");
+                               
+            } else {
+
+                curBtn.text("F");
+
+                curBtn.click((e) => {
+                    e.preventDefault();
+                    return false;
+                });
+            }
+        }
+
+        return false;
+
+    }
+
+    //
+    function tileClick(row, col) {
+            
+        var curBtn = $('#' + row + "\\," + col);
+        
+        // stops user from clicking revealed tile
+        if (curBtn.text() === '\xa0') {
+            var _href = curBtn.attr('href');
+            var _secRemovedHref = _href.substr(0, _href.length - 1);
+            curBtn.attr("href", _secRemovedHref + sec);
+            console.log(sec);
+        } else {
+            // disables clicking          
+            return false;
+        }
+
+    }
+    
+    // reloads gameboard partialview and resets timer
+    function resetGame() {
+        clearInterval(interval);
+            $.get("/Game/Reset");
+            $.ajax({
+                url: "/Game"
+            }).done(function (data) {
+                $("#GameBoard").html(data);
+                sec = -1;
+                startTimer();
+            });        
+    }
+    
+
+
+    // reloads gameboard partialview and resets timer
+    function saveGame() {
+        
+        $.ajax({
+            url: "/Game/Save"
+        }).done(function (data) {
+            $("#GameBoard").html(data);  
+            sec = @Model.Game.Secs;
+            clearInterval(interval);
+            startTimer();
+        });        
+    }
+
+
+    function startTimer() {
+         // updates timer every second
+        interval = setInterval(function() {           
+            $("#timer").html(++sec + "<br>Seconds");
+        }, 1000);
+    }            
+    
+
+    // checks too see if page can be modified safely
+    $(document).ready(function () {
+        startTimer();
+        $(document).bind("contextmenu",function(e){
+            return false;
+        });
+    });
+
+</script>    
+
+</body>
+</html>

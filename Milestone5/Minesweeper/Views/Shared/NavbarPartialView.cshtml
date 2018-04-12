@@ -1,0 +1,9 @@
+﻿<div class="navbar navbar-inverse navbar-fixed-top">
+    <ul class="nav navbar-nav navbar-right">
+       
+        <li><a href="#" onclick="if (confirm('Are You Sure?')) { resetGame(); }">Retry</a></li>
+        <li><a href="#" onclick="if (confirm('Do You Want To Save?')) { saveGame(); }">Save</a></li>
+        <li>@Html.ActionLink("Log Out", "Index", "Login", new {}, new {})</li>
+    </ul>
+</div>
+
