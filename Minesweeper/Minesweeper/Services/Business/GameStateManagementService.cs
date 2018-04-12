@@ -12,6 +12,10 @@ using Newtonsoft.Json;
 namespace Minesweeper.Services.Business
 {
 
+    /**
+     * Manages Insertion and Restoration of 
+     * GameJson
+     */
     public class GameStateManagementService
     {
 
@@ -24,6 +28,12 @@ namespace Minesweeper.Services.Business
             return GameSvc.PlayerIDInDatabase(ID);
         }
 
+        /**
+         * Retrieves Game State from DB,
+         * Deserializes it, then injects it into
+         * the Game Singleton Dictionary with the PlayerID
+         * as the key
+         */ 
         public void RestoreGameState(int ID) {
 
             // get game from db as json
@@ -49,6 +59,7 @@ namespace Minesweeper.Services.Business
 
             PlayerStatModel CurStat = new PlayerStatModel(Game.Clicks,Game.Secs);
             
+            // insert game state into database
             GameSvc.InsertGameState(ID ,gameJson,CurStat);
 
         }

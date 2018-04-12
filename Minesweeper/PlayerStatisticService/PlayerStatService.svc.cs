@@ -9,16 +9,20 @@ using Minesweeper.Models;
 using Minesweeper.Services.Data;
 
 namespace PlayerStatisticService {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "PlayerStatService" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select PlayerStatService.svc or PlayerStatService.svc.cs at the Solution Explorer and start debugging.
+    
     public class PlayerStatService : IPlayerStatService {
         private GameStateDAO GameStateSvc;
-
+        
         public PlayerStatService() {
             GameStateSvc = new GameStateDAO();
         }
 
+        /**
+         * Retrieves a List of players
+         * Returns List<Players> 
+         */
         public DTO GetAllPlayerStats() {
+
             int StatusCode = 0;
             String Message = "Success";
             List<PlayerStatModel> Results = null;
@@ -40,10 +44,12 @@ namespace PlayerStatisticService {
                 Results = new List<PlayerStatModel>();
             }
 
-
             return new DTO(StatusCode, Message, Results);
         }
 
+        /**
+         * returns PlayerStat
+         */
         public DTO GetPlayerStat(string id) {
 
             int StatusCode = 0;
