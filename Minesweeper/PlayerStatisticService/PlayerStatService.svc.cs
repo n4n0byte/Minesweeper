@@ -24,7 +24,7 @@ namespace PlayerStatisticService {
             List<PlayerStatModel> Results = null;
 
             try {
-                List<PlayerStatModel> Results = GameStateSvc.GetAllPlayerStats();
+                Results = GameStateSvc.GetAllPlayerStats();
 
                 // set status and message codes if nothing is returned
                 if (Results.Count == 0) {
@@ -45,30 +45,42 @@ namespace PlayerStatisticService {
         }
 
         public DTO GetPlayerStat(string id) {
+
             int StatusCode = 0;
             String Message = "Success";
             List<PlayerStatModel> Results = new List<PlayerStatModel>();
             PlayerStatModel Result = null;
 
-            int IdNum = -1;
+            try {
 
-            // set error if input is not a number
-            if (Int32.TryParse(id, out IdNum) == false) {
-                StatusCode = -2;
-                Message = "Error, not a number";
-            }
-            else {
-                Result = GameStateSvc.GetPlayerStatModelById(IdNum);
+                int IdNum = -1;
 
-                if (Result == null) {
-                    StatusCode = -1;
-                    Message = "Player Id not found";
-                    Results = new List<PlayerStatModel>();
+                // set error if input is not a number
+                if (Int32.TryParse(id, out IdNum) == false) {
+                    StatusCode = -3;
+                    Message = "Error, not a number";
                 }
                 else {
-                    Results.Add(Result);
+                    Result = GameStateSvc.GetPlayerStatModelById(IdNum);
+
+                    // check if player is in db
+                    if (Result == null) {
+                        StatusCode = -1;
+                        Message = "Player Id not found";
+                        Results = new List<PlayerStatModel>();
+                    }
+                    else {
+                        Results.Add(Result);
+                    }
                 }
             }
+            catch (Exception e) {
+                // set error if exception is thrown
+                // set Message to this
+                StatusCode = -2;
+                Message = $"Server Error\n{e.StackTrace}";
+            }
+           
 
             return new DTO(StatusCode, Message, Results);
         }
