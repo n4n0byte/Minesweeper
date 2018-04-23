@@ -10,15 +10,18 @@ using Minesweeper.Models;
 
 namespace Minesweeper.Services.Data {
     public class GameStateDAO {
-        private string connectionString =
+        private static string connectionString =
             @"Data Source=(localdb)\MSSQLLocalDB;Integrated Security=True;Connect Timeout=15;Encrypt=False;
                   TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+        private static string DBSelect = @"use Minesweeper;";
+
 
         public bool PlayerIDInDatabase(int PlayerID) {
             bool PlayerIdInDB = false;
 
             try {
-                string query = "use Minesweeper; SELECT * from dbo.GameState where player_id = @PlayerID";
+                string query = $"{DBSelect} SELECT * from dbo.GameState where player_id = @PlayerID";
                 //Create connection and command
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 using (SqlCommand cmd = new SqlCommand(query, cn)) {
@@ -45,13 +48,16 @@ namespace Minesweeper.Services.Data {
             return PlayerIdInDB;
         }
 
-
+        /**
+         * Will Return null if not found
+         * returns PlayerStatModel
+         */
         public PlayerStatModel GetPlayerStatModelById(int PlayerID) {
             PlayerStatModel Result = null;
 
             try {
                 string query =
-                    "use Minesweeper; SELECT player_id, number_of_clicks, seconds_playing from dbo.GameState where player_id = @player_id;";
+                    $"{DBSelect} SELECT player_id, number_of_clicks, seconds_playing from dbo.GameState where player_id = @player_id;";
                 //Create connection and command
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 using (SqlCommand cmd = new SqlCommand(query, cn)) {
@@ -83,11 +89,15 @@ namespace Minesweeper.Services.Data {
             return Result;
         }
 
+        /**
+         * returns null if db doesnt find anythin
+         * returns string (of the game state)
+         */
         public string GetGameJsonByID(int PlayerID) {
             string Result = null;
 
             try {
-                string query = "use Minesweeper; SELECT game_json from dbo.GameState where player_id = @player_id;";
+                string query = $"{DBSelect} SELECT game_json from dbo.GameState where player_id = @player_id;";
                 //Create connection and command
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 using (SqlCommand cmd = new SqlCommand(query, cn)) {
@@ -126,7 +136,7 @@ namespace Minesweeper.Services.Data {
 
 
             string query =
-                "use Minesweeper; SELECT player_id, number_of_clicks, seconds_playing from dbo.GameState;";
+                $"{DBSelect} SELECT player_id, number_of_clicks, seconds_playing from dbo.GameState;";
             //Create connection and command
             using (SqlConnection cn = new SqlConnection(connectionString))
             using (SqlCommand cmd = new SqlCommand(query, cn)) {
@@ -159,7 +169,7 @@ namespace Minesweeper.Services.Data {
          */
         public void UpdateGameState(int PlayerID, string GameJson, PlayerStatModel Stat) {
             string query =
-                "use Minesweeper; UPDATE dbo.GameState  SET game_json = @GameJson, number_of_clicks = @number_of_clicks, seconds_playing = @seconds_playing  WHERE player_id = @PlayerID; ";
+                $"{DBSelect} UPDATE dbo.GameState  SET game_json = @GameJson, number_of_clicks = @number_of_clicks, seconds_playing = @seconds_playing  WHERE player_id = @PlayerID; ";
 
             try {
                 //Create connection and command
@@ -188,6 +198,8 @@ namespace Minesweeper.Services.Data {
          * then inserts them into the database
          */
         public void InsertGameState(int PlayerID, string GameJson, PlayerStatModel Stat) {
+
+            // check if Game State Needs to be updated
             if (PlayerIDInDatabase(PlayerID)) {
                 Console.WriteLine("In Update");
                 UpdateGameState(PlayerID, GameJson, Stat);
@@ -196,8 +208,8 @@ namespace Minesweeper.Services.Data {
 
 
             string query =
-                @"use Minesweeper; INSERT INTO dbo.GameState (player_id, game_json, number_of_clicks,seconds_playing ) 
-                            VALUES(@player_id, @game_json, @number_of_clicks, @seconds_playing);";
+                $@"{DBSelect} INSERT INTO dbo.GameState (player_id, game_json, number_of_clicks,seconds_playing ) 
+                              VALUES (@player_id, @game_json, @number_of_clicks, @seconds_playing);";
 
             try {
                 //Create connection and command

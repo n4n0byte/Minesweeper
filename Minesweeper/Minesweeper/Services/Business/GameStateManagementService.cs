@@ -22,6 +22,20 @@ namespace Minesweeper.Services.Business
         private GameStateDAO GameSvc = new GameStateDAO();
 
         /**
+         * 
+         */
+        public PlayerStatModel GetPlayerStatModelById(int PlayerID) {
+            return GameSvc.GetPlayerStatModelById(PlayerID);
+        }
+
+        /**
+         * returns a list of all playerstats in db
+         */
+        public List<PlayerStatModel> GetAllPlayerStats() {
+            return GameSvc.GetAllPlayerStats();
+        }
+
+        /**
          * checks if User has saved a game
          */
         public bool HasGameInDB(int ID) {

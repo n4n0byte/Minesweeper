@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using Minesweeper.Services.Data;
 using Newtonsoft.Json;
 
-namespace Minesweeper.Controllers {
+namespace Minesweeper.Controllers {     
     public class LoginController : Controller {
 
         [HttpGet]

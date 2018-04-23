@@ -6,15 +6,19 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 using Minesweeper.Models;
+using Minesweeper.Services.Business;
 using Minesweeper.Services.Data;
 
 namespace PlayerStatisticService {
     
     public class PlayerStatService : IPlayerStatService {
-        private GameStateDAO GameStateSvc;
+        private GameStateManagementService GameStateSvc;
         
+        /**
+         * 
+         */
         public PlayerStatService() {
-            GameStateSvc = new GameStateDAO();
+            GameStateSvc = new GameStateManagementService();
         }
 
         /**

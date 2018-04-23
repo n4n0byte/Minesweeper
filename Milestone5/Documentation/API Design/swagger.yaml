@@ -1,0 +1,124 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Minesweeper Player Stats"
+basePath: "/PlayerStatService.svc"
+tags:
+- name: "Player Statistics"
+  description: "Each statistic contains a PlayerID, Number of Clicks and Seconds playing"
+schemes:
+- "https"
+paths:
+  /GetAllPlayerStats:
+    get:
+      tags:
+      - "All PlayerStats"
+      summary: "Get all player stats"
+      description: ""
+      operationId: ""
+      produces:
+      - "application/json"
+      responses:
+        100:
+          description: "Success"
+          schema: 
+            $ref: '#/definitions/DTO'
+            
+        101:
+          description: "No players found"
+        102:
+          description: "Internal Server Error"
+   
+  /GetPlayerStat/{id}:
+    get:
+      tags:
+      - "Player Stat by User Id"
+      summary: "Get PlayerStatistic by PlayerID"
+      description: ""
+      operationId: "getUserByName"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Gets stats for player given Id"
+        required: true
+        type: "string"
+      responses:
+        100:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/PlayerStat'
+        101:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+        102:
+          description: "User not found"
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+
+        103:
+          description: "Not a number"
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+
+  PlayerStat:
+    type: "object"
+    properties:
+        NumberOfClicks:
+          type: "integer"
+          format: "in32"
+        PlayerId:
+          type: "integer"
+          format: "in32"
+        TimeSpent:
+          type: "integer"
+          format: "in32"
+  ErrorDTO:
+    type: "object"
+    properties:
+      array:
+        items:
+          example: []
+      Status:
+         type: "integer"
+         format: "in32"
+      Message:
+        type: "string"
+        
+  DTO:
+    type: "object"
+    properties:
+      Data:
+        type: "array"
+        items:
+          $ref: '#/definitions/PlayerStat' 
+       
+      Status:
+         type: "integer"
+         format: "in32"
+      Message:
+        type: "string"
+        
+        
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
+  
+  
+  

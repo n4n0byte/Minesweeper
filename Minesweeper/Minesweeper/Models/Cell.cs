@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Minesweeper {
-
+    
     [DataContract]
     public class Cell {
 
