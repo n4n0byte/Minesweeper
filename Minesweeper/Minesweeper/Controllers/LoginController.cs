@@ -19,17 +19,29 @@ namespace Minesweeper.Controllers {
             Logger = logger;
         }
 
+        /// <summary>
+        /// shows view with 
+        /// login form
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Index() {
 
-            Logger.Debug("In {0}", this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            Logger.Debug("In {0}", GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name);
             return View("Login");
         }
 
+        /// <summary>
+        /// Tries to authenticate
+        /// user credentials, redirects
+        /// to login page if unavailable
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Login(UserModel model) {
 
-            Logger.Debug("In {0}", this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            Logger.Debug("In {0}", GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name);
 
             SecurityService service = new SecurityService();
 
