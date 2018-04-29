@@ -40,10 +40,11 @@ namespace Minesweeper.Controllers {
         /// <returns>ActionResult</returns>
         [HttpGet]
         public ActionResult Index() {
-            Logger.Debug("In {0}", GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            Logger.Debug($"In {GetType().FullName}.{System.Reflection.MethodBase.GetCurrentMethod().Name}");
 
             // try to insert into db
-            try {
+            try
+            {
                 // if ajax request return partial view
                 if (Request.IsAjaxRequest()) {
                     return PartialView("GameBoard", GameViewModel);
@@ -84,6 +85,8 @@ namespace Minesweeper.Controllers {
         [HttpGet]
         [Route("Game/Reset")]
         public ActionResult Reset() {
+            Logger.Debug($"In {GetType().FullName}.{System.Reflection.MethodBase.GetCurrentMethod().Name}");
+
             // sets cell, clicks and count ints to 0
             // sets flagged, Won and lost bools to false
             GameSvc.ResetBoard();
@@ -105,10 +108,11 @@ namespace Minesweeper.Controllers {
         [HttpGet]
         [Route("Game/Restore")]
         public ActionResult RestoreGame() {
-            Logger.Debug("In {0}", GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            Logger.Debug($"In {GetType().FullName}.{System.Reflection.MethodBase.GetCurrentMethod().Name}");
 
             //attempts to restore game state
-            try {
+            try
+            {
                 Logger.Debug("Attempting to restore game board for user: {0}", ID.ToString());
                 GameStateSvc.RestoreGameState(ID);
                 GameViewModel = new GameStateViewModel(ID);
@@ -129,7 +133,7 @@ namespace Minesweeper.Controllers {
         [HttpPost]
         [Route("Game/{Row}/{Col}")]
         public ActionResult Flag(int Row, int Col) {
-            Logger.Debug("In {0}", GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            Logger.Debug($"In {GetType().FullName}.{System.Reflection.MethodBase.GetCurrentMethod().Name}");
             GameSvc.ToggleFlag(Row, Col);
             return PartialView("GameBoard", GameViewModel);
         }
@@ -141,11 +145,12 @@ namespace Minesweeper.Controllers {
         [HttpGet]
         [Route("Game/Save")]
         public ActionResult Save() {
-            Logger.Debug("In {0}", GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            Logger.Debug($"In {GetType().FullName}.{System.Reflection.MethodBase.GetCurrentMethod().Name}");
 
             // attempts to serialize and store Game State
             // in db with user id as key
-            try {
+            try
+            {
                 GameStateSvc.InsertGameState(ID);
             }
             catch (Exception e) {

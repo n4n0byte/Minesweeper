@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Minesweeper.CompositeModels;
 using Minesweeper.Services.Data;
 using Minesweeper.Services.Utility;
 using Newtonsoft.Json;
@@ -13,10 +14,12 @@ using Newtonsoft.Json;
 namespace Minesweeper.Controllers {     
     public class LoginController : Controller {
 
-        private LLogger Logger;
+        private ILogger Logger;
+        private AuthorizationViewModel Model;
 
         public LoginController(LLogger logger) {
             Logger = logger;
+            Model = new AuthorizationViewModel();
         }
 
         /// <summary>
@@ -27,7 +30,7 @@ namespace Minesweeper.Controllers {
         [HttpGet]
         public ActionResult Index() {
 
-            Logger.Debug("In {0}", GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            Logger.Debug($"In {GetType().FullName}.{System.Reflection.MethodBase.GetCurrentMethod().Name}");
             return View("Login");
         }
 
@@ -41,19 +44,34 @@ namespace Minesweeper.Controllers {
         [HttpPost]
         public ActionResult Login(UserModel model) {
 
-            Logger.Debug("In {0}", GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            Logger.Debug($"In {GetType().FullName}.{System.Reflection.MethodBase.GetCurrentMethod().Name}");
 
             SecurityService service = new SecurityService();
 
-            // authenticate user and redirect them
-            if (service.Authenticate(model)) {
-                System.Web.HttpContext.Current.Session["Username"] = model.Username;
-                System.Web.HttpContext.Current.Session["ID"] = service.GetUserId(model);
-                
-                return RedirectToAction("Index", "Game");
-            }
+            // try to authenticate user
+            try {
+                // authenticate user and redirect them
+                if (service.Authenticate(model))
+                {
+                    System.Web.HttpContext.Current.Session["Username"] = model.Username;
+                    System.Web.HttpContext.Current.Session["ID"] = service.GetUserId(model);
 
-            return RedirectToAction("Index");
+                    return RedirectToAction("Index", "Game");
+                }
+                // render error message
+                else {
+                    Model.Message = "Invalid Credentials";
+                    return View("Login", Model);
+                }
+
+            }
+            catch (Exception e) {
+                // log error and render response
+                Logger.Error(e.ToString());
+                Logger.Info(model.ToString());
+                Model.Message = "Internal Error";
+                return View("Login", Model);
+            }
         }
     }
 }
