@@ -102,7 +102,7 @@ namespace Minesweeper.Controllers {
         /// with the game state
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [Route("Game/Restore")]
         public ActionResult RestoreGame() {
             Logger.Debug("In {0}", GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name);
@@ -134,7 +134,10 @@ namespace Minesweeper.Controllers {
             return PartialView("GameBoard", GameViewModel);
         }
 
-
+        /// <summary>
+        /// Saves Game State
+        /// </summary>
+        /// <returns>PartialView GameBoard</returns>
         [HttpGet]
         [Route("Game/Save")]
         public ActionResult Save() {
@@ -152,6 +155,13 @@ namespace Minesweeper.Controllers {
             return PartialView("GameBoard", GameViewModel);
         }
 
+        /// <summary>
+        /// Shows Game View
+        /// </summary>
+        /// <param name="Row"></param>
+        /// <param name="Col"></param>
+        /// <param name="Secs"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("Game/{Row}/{Col}/{Secs}")]
         public ActionResult Index(int Row, int Col, int Secs) {
@@ -159,6 +169,8 @@ namespace Minesweeper.Controllers {
             Logger.Debug("In {0}", GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name);
 
             String GameStatus = "Ongoing";
+
+            Logger.Debug("Game Status: {0}",GameStatus);
 
             GameViewModel.Game.Clicks++;
 
@@ -174,10 +186,7 @@ namespace Minesweeper.Controllers {
                 if (GameModel.GetGameModelInstance(ID).HasLost) {
                     GameStatus = "Lost";
                 }
-
-                if (!GameStatus.Equals("Ongoing")) {
-                }
-
+                
                 GameViewModel.Status = GameStatus;
 
 

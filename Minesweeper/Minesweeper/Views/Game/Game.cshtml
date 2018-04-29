@@ -106,6 +106,19 @@
 
     }
 
+    // reloads gameboard partialview and resets timer
+    function restoreGame() {
+        
+        $.ajax({
+            url: "/Game/Restore"
+        }).done(function (data) {
+            $("#GameBoard").html(data);  
+            sec = @Model.Game.Secs;
+            clearInterval(interval);
+            startTimer();
+        });        
+
+    }
 
     function startTimer() {
          // updates timer every second
