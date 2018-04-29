@@ -1,3 +1,4 @@
+using Minesweeper.Services.Utility;
 using System;
 
 using Unity;
@@ -39,6 +40,7 @@ namespace Minesweeper
             // NOTE: To load from web.config uncomment the line below.
             // Make sure to add a Unity.Configuration to the using statements.
             // container.LoadConfiguration();
+            container.RegisterType<ILogger, LLogger>();
 
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
