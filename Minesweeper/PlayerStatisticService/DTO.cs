@@ -8,6 +8,9 @@ using Minesweeper.Models;
 namespace PlayerStatisticService
 {
 
+    /// <summary>
+    /// DTO for PlayerStats
+    /// </summary>
     [DataContract]
     public class DTO
     {
@@ -18,9 +21,7 @@ namespace PlayerStatisticService
             this.Data = Data;
         }
 
-        public DTO() {
-            
-        }
+        public DTO() {}
 
         [DataMember]
         public int Status { get; set; }

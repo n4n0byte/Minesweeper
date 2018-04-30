@@ -16,13 +16,13 @@ namespace Minesweeper.Controllers {
     /// to manage and show state
     /// </summary>
     public class GameController : Controller {
-        private static int ID = (int) System.Web.HttpContext.Current.Session["ID"];
+        private int ID = (int) System.Web.HttpContext.Current.Session["ID"];
 
-        private GameManagementService GameSvc = new GameManagementService(ID);
+        private GameManagementService GameSvc;
 
-        private GameStateViewModel GameViewModel = new GameStateViewModel(ID);
+        private GameStateViewModel GameViewModel;
 
-        private GameStateManagementService GameStateSvc = new GameStateManagementService();
+        private GameStateManagementService GameStateSvc;
 
         private readonly ILogger Logger;
 
@@ -32,6 +32,9 @@ namespace Minesweeper.Controllers {
         /// <param name="logger"></param>
         public GameController(ILogger logger) {
             Logger = logger;
+            GameSvc = new GameManagementService(ID);
+            GameViewModel = new GameStateViewModel(ID) {Game = GameModel.GetGameModelInstance(ID)};
+            GameStateSvc = new GameStateManagementService();
         }
 
         /// <summary>
@@ -76,6 +79,18 @@ namespace Minesweeper.Controllers {
                 Logger.Error(e.ToString());
                 return RedirectToAction("Index", "Login");
             }
+        }
+
+        /// <summary>
+        /// Clears sesion and logs out
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("Game/Exit")]
+        public ActionResult Exit() {
+            // clear session
+            System.Web.HttpContext.Current.Session.Clear();
+            return View("~/Views/Login/Login.cshtml", new AuthorizationViewModel() {Message = "Logged Out"});
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
@@ -30,16 +31,18 @@ namespace Minesweeper.Models
         [Required]
         public string State { get; set; }
 
+        [DisplayName("First Name")]
         [StringLength(50, MinimumLength = 3)]
         [Required]
         public string FirstName { get; set; }
 
+        [DisplayName("Last Name")]
         [StringLength(50, MinimumLength = 3)]
         [Required]
         public string LastName { get; set; }
 
         [Required]
-        [Range(10,180)]
+        [Range(4,100)]
         public int Age { get; set; }
 
         [StringLength(50, MinimumLength = 3)]
