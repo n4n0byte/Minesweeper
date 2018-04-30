@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.Ajax.Utilities;
 using Minesweeper.CompositeModels;
+using Minesweeper.Filters;
 using Minesweeper.Models;
 using Minesweeper.Services.Business;
 using Minesweeper.Services.Utility;
@@ -15,8 +16,9 @@ namespace Minesweeper.Controllers {
     /// Interacts with Game services
     /// to manage and show state
     /// </summary>
+    [AuthorizationFilter]
     public class GameController : Controller {
-        private int ID = (int) System.Web.HttpContext.Current.Session["ID"];
+        private int ID;
 
         private GameManagementService GameSvc;
 
@@ -32,9 +34,20 @@ namespace Minesweeper.Controllers {
         /// <param name="logger"></param>
         public GameController(ILogger logger) {
             Logger = logger;
-            GameSvc = new GameManagementService(ID);
-            GameViewModel = new GameStateViewModel(ID) {Game = GameModel.GetGameModelInstance(ID)};
-            GameStateSvc = new GameStateManagementService();
+
+            var tmpId = System.Web.HttpContext.Current.Session["ID"];
+
+            // dont instantiate business services
+            // unless there is an id in session
+            // authorization filter runs after
+            // constructer
+            if (tmpId != null) {
+                ID = (int) tmpId;
+                GameSvc = new GameManagementService(ID);
+                GameViewModel = new GameStateViewModel(ID) { Game = GameModel.GetGameModelInstance(ID) };
+                GameStateSvc = new GameStateManagementService();
+            }
+
         }
 
         /// <summary>
