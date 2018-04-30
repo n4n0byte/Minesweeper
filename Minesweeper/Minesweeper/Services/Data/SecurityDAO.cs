@@ -5,9 +5,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using Minesweeper.Services.Utility;
 
 namespace Minesweeper.Services.Data {
 
+  
     /// <summary>
     /// Handles tasks related to authentication and 
     /// registration
@@ -46,6 +48,11 @@ namespace Minesweeper.Services.Data {
             }
         }
 
+        /// <summary>
+        /// Checks if user is registered
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>bool userRegistered</returns>
         public bool CheckIfUserIsRegistered(UserModel user) {
             bool result = false;
 
@@ -69,14 +76,23 @@ namespace Minesweeper.Services.Data {
                 return result;
             }
             catch (SqlException e) {
-                // TODO: should log exception and then throw a custom exception
+                
                 throw e;
             }
         }
 
+        /// <summary>
+        /// Retrieves the userId of a user
+        /// given username and password
+        /// will be -1 if none found
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>UserID</returns>
         public int GetUserId(UserModel user) {
+
             int id = -1;
 
+            // try to get userID
             try {
                 //Setup SELECT query with parameters
                 string query = "SELECT * FROM dbo.Users WHERE USERNAME=@Username AND PASSWORD=@Password";
@@ -99,14 +115,21 @@ namespace Minesweeper.Services.Data {
                 }
             }
             catch (SqlException e) {
-                // TODO: should log exception and then throw a custom exception
-                Console.WriteLine(e.StackTrace);
+                throw e;
             }
 
             return id;
         }
 
+        /// <summary>
+        /// returns a bool indicating
+        /// whether or not a user was found,
+        /// searches by username
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public bool FindByUser(UserModel user) {
+
             bool result = false;
 
             try {
@@ -130,8 +153,7 @@ namespace Minesweeper.Services.Data {
                 }
             }
             catch (SqlException e) {
-                // TODO: should log exception and then throw a custom exception
-                Console.WriteLine(e.StackTrace);
+                throw e;
             }
             return result;
         }

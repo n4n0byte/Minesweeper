@@ -10,11 +10,19 @@ using Minesweeper.Services.Utility;
 
 namespace Minesweeper.Controllers {
 
+    /// <summary>
+    /// Handles user registration
+    /// </summary>
     public class RegisterController : Controller {
 
         private ILogger Logger;
         private AuthorizationViewModel Model;
 
+        /// <summary>
+        /// Injects a logger and
+        /// makes an empty AuthorizationViewModel
+        /// </summary>
+        /// <param name="logger"></param>
         public RegisterController(ILogger logger) {
             Logger = logger;
             Model = new AuthorizationViewModel();            
@@ -32,6 +40,11 @@ namespace Minesweeper.Controllers {
             return View("Register");
         }
 
+        /// <summary>
+        /// Inserts user info into db
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Register(AuthorizationViewModel user) {
             Logger.Debug($"In {GetType().FullName}.{System.Reflection.MethodBase.GetCurrentMethod().Name}");

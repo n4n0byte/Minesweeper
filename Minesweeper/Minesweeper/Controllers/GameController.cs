@@ -16,7 +16,6 @@ namespace Minesweeper.Controllers {
     /// Interacts with Game services
     /// to manage and show state
     /// </summary>
-    [AuthorizationFilter]
     public class GameController : Controller {
         private int ID;
 
