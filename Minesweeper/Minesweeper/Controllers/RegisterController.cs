@@ -33,7 +33,7 @@ namespace Minesweeper.Controllers {
         }
 
         [HttpPost]
-        public ActionResult Register(UserModel user) {
+        public ActionResult Register(AuthorizationViewModel user) {
             Logger.Debug($"In {GetType().FullName}.{System.Reflection.MethodBase.GetCurrentMethod().Name}");
 
             // tries to register user
@@ -42,10 +42,11 @@ namespace Minesweeper.Controllers {
                 SecurityService service = new SecurityService();
 
                 // checks to see if user info is already in db
-                if (service.CanRegister(user))
+                if (service.CanRegister(user.Model))
                 {
-                    service.RegisterUser(user);
-                    return View("RegisterSuccess");
+                    service.RegisterUser(user.Model);
+                    Model.Message = "Successfully Registered";
+                    return View("~/Views/Login/Login.cshtml", Model);
                 }
                 else {
                     Model.Message = "Someone Already has this username";

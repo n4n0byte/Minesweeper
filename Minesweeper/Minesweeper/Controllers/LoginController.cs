@@ -39,22 +39,23 @@ namespace Minesweeper.Controllers {
         /// user credentials, redirects
         /// to login page if unavailable
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="user"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Login(UserModel model) {
+        public ActionResult Login(AuthorizationViewModel user) {
 
             Logger.Debug($"In {GetType().FullName}.{System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            Logger.Debug($"UserModel : {user.Model}");
 
             SecurityService service = new SecurityService();
 
             // try to authenticate user
             try {
                 // authenticate user and redirect them
-                if (service.Authenticate(model))
+                if (service.Authenticate(user.Model))
                 {
-                    System.Web.HttpContext.Current.Session["Username"] = model.Username;
-                    System.Web.HttpContext.Current.Session["ID"] = service.GetUserId(model);
+                    System.Web.HttpContext.Current.Session["Username"] = user.Model.Username;
+                    System.Web.HttpContext.Current.Session["ID"] = service.GetUserId(user.Model);
 
                     return RedirectToAction("Index", "Game");
                 }
@@ -68,7 +69,7 @@ namespace Minesweeper.Controllers {
             catch (Exception e) {
                 // log error and render response
                 Logger.Error(e.ToString());
-                Logger.Info(model.ToString());
+                Logger.Info(user.ToString());
                 Model.Message = "Internal Error";
                 return View("Login", Model);
             }

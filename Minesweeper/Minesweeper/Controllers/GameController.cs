@@ -120,7 +120,8 @@ namespace Minesweeper.Controllers {
             }
             catch (Exception e) {
                 Logger.Error(e.ToString());
-                return View("~/Views/Login/Login.cshtml");
+                AuthorizationViewModel m = new AuthorizationViewModel {Message = "internal error"};
+                return View("~/Views/Login/Login.cshtml", m);
             }
         }
 
@@ -185,6 +186,7 @@ namespace Minesweeper.Controllers {
                 GameSvc.ProcessCell(Row, Col);
                 GameSvc.UpdateTime(Secs);
 
+                // check for win/loss and update game status
                 if (GameModel.GetGameModelInstance(ID).HasWon) {
                     GameStatus = "Won";
                 }

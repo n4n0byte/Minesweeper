@@ -363,11 +363,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
     <Content Include="Views\Login\Login.cshtml" />
-    <Content Include="Views\Login\LoginFailed.cshtml" />
-    <Content Include="Views\Register\RegisterFailed.cshtml" />
     <Content Include="Views\Register\Register.cshtml" />
-    <Content Include="Views\Register\RegisterSuccess.cshtml" />
-    <Content Include="Views\Login\LoginPassed.cshtml" />
     <Content Include="Views\Game\Game.cshtml" />
     <Content Include="Views\Shared\GameBoard.cshtml" />
     <Content Include="Views\Shared\NavbarPartialView.cshtml" />
