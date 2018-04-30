@@ -12,6 +12,7 @@ using Minesweeper.Services.Business;
 using Minesweeper.Services.Utility;
 
 namespace Minesweeper.Controllers {
+
     /// <summary>
     /// Interacts with Game services
     /// to manage and show state

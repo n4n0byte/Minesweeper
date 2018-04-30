@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -203,7 +201,7 @@ namespace Minesweeper.Services.Data {
                 //Set query parameters and their values
                 cmd.Parameters.AddWithValue("@PlayerID", PlayerID);
                 cmd.Parameters.AddWithValue("@GameJson", GameJson);
-                cmd.Parameters.AddWithValue("@seconds_playing", Stat.TimeSpent);
+                cmd.Parameters.AddWithValue("@seconds_playing", Stat.SecondsPlaying);
                 cmd.Parameters.AddWithValue("@number_of_clicks", Stat.NumberOfClicks);
 
                 int result = cmd.ExecuteNonQuery();
@@ -237,7 +235,7 @@ namespace Minesweeper.Services.Data {
                 //Set query parameters and their values
                 cmd.Parameters.AddWithValue("@player_id", PlayerID);
                 cmd.Parameters.AddWithValue("@game_json", GameJson);
-                cmd.Parameters.AddWithValue("@seconds_playing", Stat.TimeSpent);
+                cmd.Parameters.AddWithValue("@seconds_playing", Stat.SecondsPlaying);
                 cmd.Parameters.AddWithValue("@number_of_clicks", Stat.NumberOfClicks);
 
                 int result = cmd.ExecuteNonQuery();

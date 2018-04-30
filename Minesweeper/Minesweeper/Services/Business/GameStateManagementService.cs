@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.Script.Serialization;
-using Microsoft.ApplicationInsights.Extensibility.Implementation;
+﻿using System.Collections.Generic;
 using Minesweeper.Models;
 using Minesweeper.Services.Data;
 using Newtonsoft.Json;
@@ -20,17 +14,21 @@ namespace Minesweeper.Services.Business
     {
 
         private GameStateDAO GameSvc = new GameStateDAO();
-
-        /**
-         * 
-         */
+        
+        /// <summary>
+        /// searches for player stat by playerID, will
+        /// return null if nothing is found
+        /// </summary>
+        /// <param name="PlayerID"></param>
+        /// <returns>PlayerStatModel</returns>
         public PlayerStatModel GetPlayerStatModelById(int PlayerID) {
             return GameSvc.GetPlayerStatModelById(PlayerID);
         }
 
-        /**
-         * returns a list of all playerstats in db
-         */
+        /// <summary>
+        /// returns all player stats in db as a list
+        /// </summary>
+        /// <returns></returns>
         public List<PlayerStatModel> GetAllPlayerStats() {
             return GameSvc.GetAllPlayerStats();
         }

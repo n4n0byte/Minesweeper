@@ -1,11 +1,6 @@
 ﻿using Minesweeper.Models;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using Minesweeper.Services.Utility;
 
 namespace Minesweeper.Services.Data {
 
@@ -23,6 +18,7 @@ namespace Minesweeper.Services.Data {
         /// <summary>
         /// attempts to register user   
         /// </summary>
+        /// <exception cref="SqlException"></exception>
         /// <param name="user"></param>
         public void RegisterUser(UserModel user) {
             string query =
@@ -52,6 +48,7 @@ namespace Minesweeper.Services.Data {
         /// Checks if user is registered
         /// </summary>
         /// <param name="user"></param>
+        /// <exception cref="SqlException"></exception>
         /// <returns>bool userRegistered</returns>
         public bool CheckIfUserIsRegistered(UserModel user) {
             bool result = false;
@@ -87,6 +84,7 @@ namespace Minesweeper.Services.Data {
         /// will be -1 if none found
         /// </summary>
         /// <param name="user"></param>
+        /// <exception cref="SqlException"></exception>
         /// <returns>UserID</returns>
         public int GetUserId(UserModel user) {
 
@@ -126,6 +124,7 @@ namespace Minesweeper.Services.Data {
         /// whether or not a user was found,
         /// searches by username
         /// </summary>
+        /// <exception cref="SqlException"></exception>
         /// <param name="user"></param>
         /// <returns></returns>
         public bool FindByUser(UserModel user) {

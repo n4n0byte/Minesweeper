@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Web;
 
 namespace Minesweeper.Models
 {
@@ -14,15 +11,15 @@ namespace Minesweeper.Models
     [DataContract]
     public class PlayerStatModel
     {
-        public PlayerStatModel(int numberOfClicks, int timeSpent) {
+        public PlayerStatModel(int numberOfClicks, int secondsPlaying) {
             NumberOfClicks = numberOfClicks;
-            TimeSpent = timeSpent;
+            SecondsPlaying = secondsPlaying;
         }
 
-        public PlayerStatModel(int playerId, int numberOfClicks, int timeSpent) {
+        public PlayerStatModel(int playerId, int numberOfClicks, int secondsPlaying) {
             PlayerId = playerId;
             NumberOfClicks = numberOfClicks;
-            TimeSpent = timeSpent;
+            SecondsPlaying = secondsPlaying;
         }
 
         public PlayerStatModel() {
@@ -35,7 +32,7 @@ namespace Minesweeper.Models
         public int NumberOfClicks { get; set; }
 
         [DataMember]
-        public int TimeSpent { get; set; }
+        public int SecondsPlaying { get; set; }
 
     }
 }

@@ -1,5 +1,4 @@
-﻿
-namespace Minesweeper.Services.Utility {
+﻿namespace Minesweeper.Services.Utility {
 
     /// <summary>
     /// interface spec for logging 

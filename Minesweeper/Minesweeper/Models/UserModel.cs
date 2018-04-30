@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Web;
-using System.Web.UI.HtmlControls;
 
 namespace Minesweeper.Models
 {
+    /// <summary>
+    /// Contains Fields for a user
+    /// </summary>
     public class UserModel
     {
 
@@ -52,11 +49,14 @@ namespace Minesweeper.Models
 
         public override string ToString() {
             string result = "";
+
+            // use reflection to get 
+            // array of all properties
             PropertyInfo[] properties = GetType().GetProperties();
 
             // print each property field
             foreach (var property in properties) {
-                result += $"{property.Name} : {property.GetValue(this,null)} \n";
+                result += $"[{property.Name} : {property.GetValue(this,null)}] \n";
             }
 
             return result;

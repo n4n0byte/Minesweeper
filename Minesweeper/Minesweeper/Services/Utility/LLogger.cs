@@ -7,8 +7,6 @@ namespace Minesweeper.Services.Utility {
     /// </summary>
     public class LLogger : ILogger {
 
-        private static LLogger LogMaker;
-
         /// <summary>
         /// Returns instance of Logger
         /// </summary>

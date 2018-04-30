@@ -1,15 +1,8 @@
 ﻿using Minesweeper.Models;
 using Minesweeper.Services.Business;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Minesweeper.CompositeModels;
-using Minesweeper.Services.Data;
 using Minesweeper.Services.Utility;
-using Newtonsoft.Json;
 
 namespace Minesweeper.Controllers {     
     public class LoginController : Controller {
@@ -17,6 +10,10 @@ namespace Minesweeper.Controllers {
         private ILogger Logger;
         private AuthorizationViewModel Model;
 
+        /// <summary>
+        /// Injects a logger, initializes viewmodel member variable
+        /// </summary>
+        /// <param name="logger"></param>
         public LoginController(LLogger logger) {
             Logger = logger;
             Model = new AuthorizationViewModel();
